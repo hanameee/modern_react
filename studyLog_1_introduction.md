@@ -5,7 +5,7 @@ Modern React 강의를 통해 새롭게 알게된 내용 위주로 정리합니�
 
 Fragment란? JSX의 제약사항 중 하나인 "가장 상위에는 하나의 태그만 존재할 것" 을 만족시키기 위한 문법으로, **DOM에 별도의 노드를 추가하지 않고 (ex. <div>) 여러 자식을 그룹화**할 수 있다.
 
-[공식 API](https://ko.reactjs.org/docs/fragments.html)
+[📖공식 API 문서](https://ko.reactjs.org/docs/fragments.html)
 
 `기존 방법` : `key` attribute를 사용해야 할 때는 반드시 기존 방법대로 fragment를 명시해줘야 함
 
@@ -145,4 +145,99 @@ export default App;
 아래와 같이 [이름없음]이 기본값으로 나타난다.
 
 ![WXSoZyf](https://i.imgur.com/WXSoZyf.png)
+
+
+
+## ⭐️useState
+
+[📖공식 API 문서](https://ko.reactjs.org/docs/hooks-reference.html#usestate)
+
+`useState` 를 통해 함수형 컴포넌트에서 state를 관리할 수 있다.
+**useState** 를 호출하면 배열이 반환되는데, 첫번째 원소는 **현재 상태**, 두번째 원소는 **Setter 함수**이다
+
+```react
+const numberState = useState(0);
+// useState(0)을 호출해
+const number = numberState[0];
+// 반환된 배열의 첫번째 원소인 현재상태를 number에 저장하고
+const setNumber = numberState[1];
+// 반환된 배열의 두번째 원소인 Setter함수를 setNumber에 저장한다
+```
+
+원래는 위처럼 코드를 작성해야 하지만, 배열 비구조화 할당을 통해 아래처럼 한번에 간결하게 쓸 수 있음!
+
+```react
+const [number, setNumber] = useState(0);
+```
+
+
+
+### 동적인 값 끼얹기 - counter 예제
+
+`Counter.js`
+
+```react
+import React, {useState} from 'react';
+
+function Counter() {
+    const [number, setNumber] = useState(0);
+    const onIncrease = () => {
+        setNumber(number + 1);
+    }
+    const onDecrease = () => {
+        setNumber(number - 1);        
+    }
+    const style = {
+        width : '100%',
+        textAlign : 'center'
+    }
+    
+    return(
+        <div style = {style}>
+            <h1>{number}</h1>
+            <button onClick={onIncrease}>+1</button>
+            <button onClick={onDecrease}>-1</button>
+        </div>
+    )
+}
+
+export default Counter;
+```
+
+`App.js`
+
+```react
+import React from "react";
+import Counter from "./Counter";
+
+function App() {
+    return (
+        <div className="App">
+        	<Counter />
+        </div>
+    );
+}
+
+export default App;
+```
+
+
+
+### 함수형 업데이트
+
+위에서는 `setNumber` 의 파라미터로 업데이트 하고 싶은 **값** 을 넘겨줬다.
+이렇게 값을 넘겨주는 대신, 기존 값을 어떻게 업데이트 할 지에 대한 함수를 등록하는 방식으로도 값을 업데이트 할 수 있다.
+
+```react
+const onIncrease = () => {
+  setNumber(prevNumber => prevNumber + 1);
+}
+const onDecrease = () => {
+  setNumber(prevNumber => prevNumber - 1);
+}
+```
+
+위의 코드를 보면, setNumber 를 사용 할 때 그 다음 상태(값)를 파라미터로 넘겨주지 않고, **값을 업데이트 하는 함수**를 파라미터로 넣어주었다.
+
+이런 함수형 업데이트는 이후 **컴포넌트 최적화**를 위해 사용한다.
 

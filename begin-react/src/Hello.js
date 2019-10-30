@@ -6,10 +6,10 @@ import React from 'react';
 
 function Hello({color, name, isSpecial}) {
   return (
-    <div style={{ color }}>
+    <h1 style={{ color }}>
       {isSpecial && <b>*</b>}
       안녕하세요 {name}
-    </div>
+    </h1>
   );
 }
 
