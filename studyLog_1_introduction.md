@@ -148,7 +148,7 @@ export default App;
 
 
 
-## ⭐️useState 관
+## ⭐️useState 관련
 
 [📖공식 API 문서](https://ko.reactjs.org/docs/hooks-reference.html#usestate)
 
@@ -248,3 +248,73 @@ const onDecrease = () => {
 
 이런 함수형 업데이트는 이후 **컴포넌트 최적화**를 위해 사용한다.
 
+
+
+## useRef 관련
+
+특정 DOM을 선택해야 하는 상황에서 (ex) Javascript의 `getElementById, querySelector`) 는 `useRef`  라는 hook 함수를 사용한다.
+
+[공식 API 문서]()
+
+초기화 버튼을 눌렀을 때 특정 input 으로 focus가 가도록 만들어보자.
+
+```react
+import React, { useState, useRef } from "react";
+
+function MultipleInputSample() {
+    const [inputs, setInputs] = useState({
+        name: "",
+        nickname: ""
+    });
+    const nameInput = useRef(); // 1. useRef를 사용해 ref 객체를 만들고 이를 nameInput 변수에 할당
+
+    console.log(inputs);
+    const { name, nickname } = inputs;
+    const onChange = e => {
+        const { value, name } = e.target;
+        setInputs({
+            ...inputs,
+            [name]: value
+        });
+    };
+    const onReset = () => {
+        setInputs({
+            name: "",
+            nickname: ""
+        });
+      	// 3. 초기화를 누르면 실행되는 onReset 함수에서 input에 focus를 하는 focus() DOM API를 호출해준다
+        nameInput.current.focus()
+    };
+    return (
+        <div>
+            <input
+                name="name"
+                value={name}
+                onChange={onChange}
+                placeholder="이름"
+                // 2. nameInput ref객체를 우리가 선택하고 싶은 DOM의 ref 값으로 설정해준다. 이렇게 하면 ref 객체의 .current 값은 ref 값을 줬던 input(name) DOM을 가르키게 된다. 
+                ref={nameInput}
+            />
+            <input
+                name="nickname"
+                value={nickname}
+                onChange={onChange}
+                placeholder="닉네임"
+            />
+            <button onClick={onReset}>초기화</button>
+            <div>
+                <b>값: </b>
+                이름: {name} 닉네임: {nickname}
+            </div>
+        </div>
+    );
+}
+
+export default MultipleInputSample;
+```
+
+정리하자면,
+
+1. `useRef()` 를 사용해 Ref 객체를 만든다
+2. 이 객체를 선택하고 싶은 DOM에 `ref` 값으로 설정해준다 ( Ref 객체의 .current 값은 해당 DOM을 가르키게 된다)
+3. 원하는 핸들러에 `Ref객체.current.DOM API` 를 호출해준다
