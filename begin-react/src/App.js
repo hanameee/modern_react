@@ -1,12 +1,12 @@
 import React from "react";
 import Wrapper from "./Wrapper";
-import SingleInputSample from "./SingleInputSample";
+import MultipleInputSample from "./MultipleInputSample";
 
 function App() {
     return (
         <div className="App">
             <Wrapper>
-                <SingleInputSample />
+                <MultipleInputSample />
             </Wrapper>
         </div>
     );

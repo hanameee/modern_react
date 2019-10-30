@@ -148,7 +148,7 @@ export default App;
 
 
 
-## ⭐️useState 관련
+## ⭐️useState 관
 
 [📖공식 API 문서](https://ko.reactjs.org/docs/hooks-reference.html#usestate)
 

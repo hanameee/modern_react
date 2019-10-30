@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState} from "react";
 
 function Counter() {
     const [number, setNumber] = useState(0);
@@ -13,8 +13,8 @@ function Counter() {
     }
 
     const style = {
-        width : '100%',
-        textAlign : 'center'
+        width : "100%",
+        textAlign : "center"
     }
     return(
         <div style = {style}>
