@@ -1,14 +1,12 @@
 import React from "react";
-import Hello from "./Hello";
 import Wrapper from "./Wrapper";
-import Counter from "./Counter";
+import SingleInputSample from "./SingleInputSample";
 
 function App() {
     return (
         <div className="App">
             <Wrapper>
-                <Hello color="skyblue" name="해나" isSpecial />
-                <Counter />
+                <SingleInputSample />
             </Wrapper>
         </div>
     );

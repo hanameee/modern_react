@@ -148,16 +148,23 @@ export default App;
 
 
 
-## ⭐️useState
+## ⭐️useState 관련
 
 [📖공식 API 문서](https://ko.reactjs.org/docs/hooks-reference.html#usestate)
 
 `useState` 를 통해 함수형 컴포넌트에서 state를 관리할 수 있다.
+
+[사용법]
+
+`const [state, setState] = useState(initialState);`
+
+최초 렌더링 시, 반환된 state(state)는 첫 번째 전달된 인자(initialState)의 값과 같다.
+
 **useState** 를 호출하면 배열이 반환되는데, 첫번째 원소는 **현재 상태**, 두번째 원소는 **Setter 함수**이다
 
 ```react
 const numberState = useState(0);
-// useState(0)을 호출해
+// useState(0)을 호출한다. state의 초기값은 0
 const number = numberState[0];
 // 반환된 배열의 첫번째 원소인 현재상태를 number에 저장하고
 const setNumber = numberState[1];
