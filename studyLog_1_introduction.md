@@ -317,4 +317,60 @@ export default MultipleInputSample;
 
 1. `useRef()` 를 사용해 Ref 객체를 만든다
 2. 이 객체를 선택하고 싶은 DOM에 `ref` 값으로 설정해준다 ( Ref 객체의 .current 값은 해당 DOM을 가르키게 된다)
-3. 원하는 핸들러에 `Ref객체.current.DOM API` 를 호출해준다
+3. 원하는 핸들러에 `Ref객체.current.DOM API` 를 추가한다
+
+
+
+## 동적 배열 렌더링
+
+```react
+import React from 'react';
+
+function User({ user }){
+    return (
+        <div>
+            <b>{user.username}</b> <span>({user.email})</span>
+        </div>
+    )
+}
+
+function UserList() {
+  const users = [
+    {
+      id: 1,
+      username: 'velopert',
+      email: 'public.velopert@gmail.com'
+    },
+    {
+      id: 2,
+      username: 'tester',
+      email: 'tester@example.com'
+    },
+    {
+      id: 3,
+      username: 'liz',
+      email: 'liz@example.com'
+    }
+  ];
+  return (
+    <div>
+        {users.map(user => (
+            <User user = {user} key = {user.id} />
+        ))}
+    </div>
+  );
+}
+
+export default UserList;
+```
+
+만약 unique한 attribute가 없다면? `map()` 함수를 사용할 때 설정하는 콜백함수의 두번째 `index`파라미터를 key로 사용하면 됨
+
+```react
+<div>
+  {users.map((user,index) => (
+  	<User user = {user} key = {index} />
+  ))}
+</div>
+```
+

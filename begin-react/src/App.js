@@ -1,12 +1,14 @@
 import React from "react";
 import Wrapper from "./Wrapper";
-import MultipleInputSample from "./MultipleInputSample";
+import UserList from "./UserList";
 
 function App() {
     return (
         <div className="App">
             <Wrapper>
-                <MultipleInputSample />
+                {/* <MultipleInputSample />
+                 */}
+                 <UserList/>
             </Wrapper>
         </div>
     );
