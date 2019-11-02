@@ -252,6 +252,8 @@ const onDecrease = () => {
 
 ## useRef 관련
 
+### 쓰임새 1. 특정 DOM 선택
+
 특정 DOM을 선택해야 하는 상황에서 (ex) Javascript의 `getElementById, querySelector`) 는 `useRef`  라는 hook 함수를 사용한다.
 
 [공식 API 문서]()
@@ -318,6 +320,29 @@ export default MultipleInputSample;
 1. `useRef()` 를 사용해 Ref 객체를 만든다
 2. 이 객체를 선택하고 싶은 DOM에 `ref` 값으로 설정해준다 ( Ref 객체의 .current 값은 해당 DOM을 가르키게 된다)
 3. 원하는 핸들러에 `Ref객체.current.DOM API` 를 추가한다
+
+### 쓰임새2. 
+
+`useRef` Hook 은 DOM 을 선택하는 용도 외에도, 다른 용도가 있다! 바로, **컴포넌트 안에서 조회 및 수정 할 수 있는 변수를 관리하는 것** 입니다.
+
+`useRef` 로 관리하는 변수는 값이 바뀐다고 해서 컴포넌트가 리렌더링되지 않는다. 리액트 컴포넌트에서의 상태 (state) 는 상태를 바꾸는 함수 (useState) 를 호출하고 나서 그 다음 렌더링 이후로 업데이트 된 상태를 조회 할 수 있는 반면, `useRef` 로 관리하고 있는 변수는 설정 후 바로 조회 할 수 있음.
+
+이 변수를 사용하여 다음과 같은 값을 관리 할 수 있습니다.
+
+- `setTimeout`, `setInterval` 을 통해서 만들어진 `id`
+
+- 외부 라이브러리를 사용하여 생성된 인스턴스
+
+- scroll 위치
+
+`App.js`
+
+```react
+const nextId = useRef(4);
+const nextCreate = () => {
+  nextId.current += 1;
+};
+```
 
 
 
