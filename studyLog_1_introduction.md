@@ -323,7 +323,7 @@ export default MultipleInputSample;
 
 ### 쓰임새2. 
 
-`useRef` Hook 은 DOM 을 선택하는 용도 외에도, 다른 용도가 있다! 바로, **컴포넌트 안에서 조회 및 수정 할 수 있는 변수를 관리하는 것** 이다.
+`useRef` Hook 은 DOM 을 선택하는 용도 외에도, 다른 용도가 있다! 바로, **컴포넌트 안에서 조회 및 수정 할 수 있는 변수를 관리하는 것**.
 
 `useRef` 로 관리하는 변수는 값이 바뀐다고 해서 컴포넌트가 리렌더링되지 않는다. 리액트 컴포넌트에서의 상태 (state) 는 상태를 바꾸는 함수 (useState) 를 호출하고 나서 그 다음 렌더링 이후로 업데이트 된 상태를 조회 할 수 있는 반면, `useRef` 로 관리하고 있는 변수는 설정 후 바로 조회 할 수 있음.
 
@@ -339,7 +339,9 @@ export default MultipleInputSample;
 
 ```react
 const nextId = useRef(4);
+// useRef에 넣어준 파라미터는 .current 값의 기본값이 됨 (여기선 nextId.current)
 const nextCreate = () => {
+  // nextId.current 값을 조회/수정하면 된다!
   nextId.current += 1;
 };
 ```
@@ -401,7 +403,131 @@ export default UserList;
 
 
 
-## 배열에 새 항목 추가
+## 배열에 새 항목 추가/제거/수정
+
+#### 1. 추가하기 - 객체의 불변성을 지켜주는 것이 중요! (배열의 push, splice, sort 등의 함수 사용X)
 
 - Spread 연산자
 - Concat 사용
+
+`App.js`
+
+```react
+import React, { useRef, useState } from "react";
+import UserList from "./UserList";
+import CreateUser from "./CreateUser";
+
+function App() {
+  	// useState의 첫번째 원소는 현재 상태, 두번째 원소는 setter 함수
+    const [inputs, setInputs] = useState({
+        username : '',
+        email : ''
+    });
+ 	 	// inputs 비구조화 할당
+    const {username, email} = inputs;
+  	// input의 onChange 이벤트에 등록한 onChange 함수 - 이벤트 객체 e를 파라미터로 받아와 사용
+    const onChange = e => {
+      	// e.target은 이벤트가 발생한 DOM인 input DOM을 가르킨다
+        const { name, value } = e.target;
+        setInputs({
+            ...inputs,
+            [name] : value
+        });
+    };
+...
+    const onCreate = () => {
+        const user = {
+            id : nextId.current,
+            username,
+            email
+        };
+        // 1. 이 방법은 spread 연산자를 활용한 방법
+        // setUsers([...users, user]);
+      	// 2. 아래 방법은 concat 을 활용한 방법 - concat은 기존의 배열을 수정하지 않고 새로운 원소가 추가된 새로운 배열을 만들어줌
+        setUsers(users.concat(user));
+        setInputs({
+            username : '',
+            email : ''
+        });
+        nextId.current += 1;
+    };
+...
+```
+
+`CreateUser.js`
+
+```react
+import React from 'react';
+// 상태관리는 CreateUser이 아닌 부모 컴포넌트 App에서 이루어짐
+// input의 값 및 이벤트로 등록할 함수들을 props로 넘겨받아 사용
+function CreateUser({ username, email, onChange, onCreate }){
+    return (
+        <div>
+            <input
+                name = "username"
+                placeholder = "계정명"
+              	// onChange 이벤트에 onChange 함수 등록
+                onChange = {onChange}
+                value = {username}
+            />
+            <input
+                name="email"
+                placeholder="이메일"
+                onChange={onChange}
+                value={email}
+            />
+            <button onClick = {onCreate}>등록</button>
+        </div>
+    )
+}
+
+export default CreateUser;
+```
+
+#### 2. 제거하기
+
+각각의 User 컴포넌트에 삭제 버튼을 추가해주고, 해당 버튼의 onClick event에 onRemove 함수를 할당한다. 또한, user.id 값을 `onRemove` 함수의 파라미터로 받아 호출한다. ( = id가 x인 객체를 삭제해라)
+
+불변성을 지키면서 특정 원소를 배열에서 제거하기 위해서는 `filter` 배열 내장 함수를 사용하는 것이 편리!
+
+`App.js`
+
+```react
+const onRemove = id => {
+  // user.id 가 파라미터와 일치하지 않는 원소만 추출해서 새로운 배열을 만듬
+  // = 즉, user.id 가 id 인 것을 제거
+  setUsers(users.filter(user => user.id !== id))
+};
+```
+
+`UserList.js`
+
+```react
+import React from 'react';
+
+function User({ user, onRemove }){
+    return (
+        <div>
+            <b>{user.username}</b> <span>({user.email})</span>
+            <button onClick = {() => onRemove(user.id)}>삭제</button>
+        </div>
+    )
+}
+
+function UserList({users, onRemove}) {
+  return (
+    <div>
+        {users.map(user => (
+            <User user = {user} onRemove = {onRemove} key = {user.id} />
+        ))}
+    </div>
+  );
+}
+
+export default UserList;
+```
+
+
+
+#### 3. 수정하기
+
