@@ -1,6 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 function User({ user, onRemove, onToggle }){
+    useEffect(() => {
+        console.log("[UserList.js] 컴포넌트가 마운트 됨")
+        return () => {
+            console.log("[UserList.js] 컴포넌트가 언마운트 됨")
+        }
+    }, [])
     return (
         <div>
             <b style = {{

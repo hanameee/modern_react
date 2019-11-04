@@ -569,4 +569,3 @@ function User({ user, onRemove, onToggle }){
 }
 ...
 ```
-
