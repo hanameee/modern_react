@@ -531,3 +531,42 @@ export default UserList;
 
 #### 3. 수정하기
 
+배열의 불변성을 유지하면서 배열을 업데이트 할 때도 역시 `map` 함수를 사용할 수 있다.
+클릭 시 users의 id값을 비교해서  id가 다르다면 그대로 두고, 같다면 active 값을 반전시키도록 구현! 
+
+`App.js`
+
+```react
+const onToggle = id => {
+  setUsers(
+    // 클릭한 id와 같은 user만 active의 상태를 반대로 바꿔준다
+    users.map(user => (user.id === id) ? {...user, active: !user.active} : user)
+  )
+}
+```
+
+`UserList.js`
+
+```react
+import React from 'react';
+
+function User({ user, onRemove, onToggle }){
+    return (
+        <div>
+            <b style = {{
+                cursor: 'pointer',
+                color: user.active ? 'green' : 'black' 
+                }}
+              	// b태그 onClick 시 onToggle 함수가 실행되도록!
+               onClick = {() => onToggle(user.id)}
+            >
+               {user.username}
+            </b>
+            <span>({user.email})</span>
+            <button onClick = {() => onRemove(user.id)}>삭제</button>
+        </div>
+    )
+}
+...
+```
+
