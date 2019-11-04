@@ -18,8 +18,12 @@ useEffect는 반드시 **function** 을 argument로 받음. 이 함수 = useEffe
 - `useEffect` 의 두번째 파라미터 = 의존값이 들어있는 배열 (deps)
 
   - deps 배열으로 빈 배열을 주면? 컴포넌트가 처음 나타날 때만 effect 함수가 호출된다.
-  - deps 배열에 특정 값을 주면? 처음 마운트 될 때, 해당 값이 바뀔 때, 언마운트 될 때, 
-  - deps 배열을 생략하면? 
+  - deps 배열에 특정 값을 주면? 처음 마운트 될 때, 해당 값이 바뀔 때, 언마운트 될 때, 값이 바뀌기 직전에 호출이 됨.
+  - deps 배열 (= useEffect()의 두번째 파라미터)을 생략하면? 컴포넌트가 Virtual DOM에 리렌더링 될 때마다 호출됨
+
+`useEffect` 안에서 사용하는 상태나, props 가 있다면, `useEffect` 의 `deps` 에 넣어주어야 합니다. 그렇게 하는게, 규칙입니다.
+
+만약 `useEffect` 안에서 사용하는 상태나 props 를 `deps` 에 넣지 않게 된다면 `useEffect` 에 등록한 함수가 실행 될 때 최신 props / 상태를 가르키지 않게 됩니다.
 
 #### 마운트/언마운트 관리
 
