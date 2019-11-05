@@ -1,5 +1,6 @@
 import React, { useReducer } from 'react';
 
+// reducer이란? 현재 상태와 액션 객체를 파라미터로 받아와서 새로운 상태를 반환해주는 함수
 function reducer(state, action){
     switch (action.type){
         case 'INCREMENT':
@@ -12,6 +13,7 @@ function reducer(state, action){
 }
 
 function Counter() {
+    // dispatch = 액션을 발생시키는 함수로, dispatch({ type:'INCREMENT'}) 와 같이 사용
     const [number,dispatch] = useReducer(reducer,0);
     const onIncrease = () => {
         dispatch({ type : 'INCREMENT' });

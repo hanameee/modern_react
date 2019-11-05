@@ -232,3 +232,4 @@ const [state, dispatch] = useReducer(reducer, initialState);
 - dispatch = 액션을 발생시키는 함수 `dispatch({ type:'INCREMENT'})` 와 같이 사용
 
 useReducer에 넣는 첫번째 파라미터는 **reducer 함수**, 두번째 파라미터는 **초기 상태**
+
