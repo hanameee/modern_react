@@ -172,3 +172,63 @@ export default React.memo(
 예를 들어서, User 컴포넌트에 `b` 와 `button` 에 `onClick` 으로 설정해준 함수들은, 해당 함수들을 `useCallback` 으로 재사용한다고 해서 리렌더링을 막을 수 있는것은 아니므로, 굳이 그렇게 할 필요 없다.
 
 추가적으로, **렌더링 최적화 하지 않을 컴포넌트에 React.memo 를 사용하는것은, 불필요한 props 비교만 하는 것**이기 때문에 실제로 렌더링을 방지할 수 있는 상황이 있는 경우에만 사용하자!
+
+
+
+## useReducer 관련
+
+상태를 관리할 때 useState 말고도 useReducer을 사용할 수 있다. 이 Hook 함수를 사용하면 컴포넌트의 상태 업데이트 로직을 컴포넌트에서 분리시킬 수 있다. (컴포넌트 바깥에 작성하거나, 다른 파일에 작성 후 불러와서 사용하거나)
+
+[참고] Reducer이란? 현재 상태와 액션 객체를 파라미터로 받아와서 새로운 상태를 반환해주는 함수.
+
+```react
+function reducer(state, action) {
+  // 새로운 상태를 만드는 로직
+  // const nextState = ...
+  return nextState;
+}
+```
+
+Reducer에서 반환하는 상태는 곧 컴포넌트가 지닐 새로운 상태가 됨.
+
+- state는 현재 상태:
+- action은 업데이트를 위한 정보를 가지고 있으며 주로 type 값을 지닌 객체 형태로 사용함 
+
+예시는 아래와 같음.
+
+```react
+// 카운터에 1을 더하는 액션
+{
+  type: 'INCREMENT'
+}
+// 카운터에 1을 빼는 액션
+{
+  type: 'DECREMENT'
+}
+// input 값을 바꾸는 액션
+{
+  type: 'CHANGE_INPUT',
+  key: 'email',
+  value: 'tester@react.com'
+}
+// 새 할 일을 등록하는 액션
+{
+  type: 'ADD_TODO',
+  todo: {
+    id: 1,
+    text: 'useReducer 배우기',
+    done: false,
+  }
+}
+```
+
+### 사용법
+
+```react
+const [state, dispatch] = useReducer(reducer, initialState);
+```
+
+- state = 우리가 앞으로 컴포넌트에서 사용할 수 있는 상태
+- dispatch = 액션을 발생시키는 함수 `dispatch({ type:'INCREMENT'})` 와 같이 사용
+
+useReducer에 넣는 첫번째 파라미터는 **reducer 함수**, 두번째 파라미터는 **초기 상태**
