@@ -1,7 +1,7 @@
 Modern React 강의를 통해 새롭게 알게된 내용 위주로 정리합니다. 🙆🏻‍♀️
 
 ## ⭐️ useEffect 관련
-#### 복습
+### 복습
 
 `useEffect` 란? 기존에 배웠던 class기반 컴포넌트의 Llifecycle Hook에서 componentDidMount (처음 created = first rendered = **마운트** 되었을 때) 와 componentDidUpdate (**업데이트** 되었을 때) 가 합쳐진 것과 유사하다.
 
@@ -9,7 +9,7 @@ useEffect는 반드시 **function** 을 argument로 받음. 이 함수 = useEffe
 
 "React 는 effect 를 기억했다가 DOM update가 이뤄진 후에 effect 를 call 한다. 즉, React는 effect 가 실행된 시점에서 update가 이뤄져있는 것을 보장한다."
 
-#### 사용법
+### 사용법
 
 - `useEffect` 의 첫번째 파라미터 = 함수 (effect)
 
@@ -25,7 +25,7 @@ useEffect는 반드시 **function** 을 argument로 받음. 이 함수 = useEffe
 
 만약 `useEffect` 안에서 사용하는 상태나 props 를 `deps` 에 넣지 않게 된다면 `useEffect` 에 등록한 함수가 실행 될 때 최신 props / 상태를 가르키지 않게 됩니다.
 
-#### 마운트/언마운트 관리
+### 마운트/언마운트 관리
 
 **[ 마운트 시에 주로 하는 작업들 ]**
 
@@ -39,3 +39,32 @@ useEffect는 반드시 **function** 을 argument로 받음. 이 함수 = useEffe
 - setInterval, setTimeout을 사용하여 등록한 작업들 clear하기 (using clearInterval, clearTimeout)
 - 라이브러리 인스턴스 제거
 
+
+
+## useMemo 관련
+
+Memo 는 "memoized" - 이전에 계산 한 값을 재사용한다는 의미!
+
+### 사용법
+
+첫번째 파라미터로 어떻게 연산할 지 정의하는 함수를, 두번째 파라미터로 deps 배열을 넣어준다.
+
+- **Deps 배열 안에 넣은 내용이 바뀌면?** 우리가 등록한 함수를 호출해서 값을 연산해주고
+- **Deps 배열 안에 넣은 내용이 바뀌지 않았으면?** 이전에 연산한 값을 재사용한다.
+
+`App.js`
+
+```react
+function countActiveUsers(users) {
+    console.log('활성 유저 수를 세는 중...');
+    return users.filter(user => user.active).length;
+}
+...
+// [users]를 deps로 넣어준다!
+const count = useMemo(() => countActiveUsers(users), [users])
+....
+```
+
+이렇게 memo를 사용하지 않으면, users.activer가 바뀔 때 뿐만 아니라 input값이 바뀌어 컴포넌트가 리렌더링 될 때도 항상 countActiveUsers가 실행되게 된다.
+
+memo를 사용해 users가 변경될 때만 함수를 호출해 값을 연산함으로써 성능 최적화가 가능하다.

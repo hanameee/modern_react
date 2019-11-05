@@ -2,13 +2,11 @@ import React, { useEffect } from 'react';
 
 function User({ user, onRemove, onToggle }){
     useEffect(() => {
-        console.log("[UserList.js] user 값이 설정됨")
-        console.log(user)
+        console.log("[UserList.js] 마운트됨")
         return () => {
-            console.log("[UserList.js] user 이 바뀌기 전?")
-            console.log(user)
+            console.log("[UserList.js] 언마운트됨")
         }
-    })
+    },[])
     return (
         <div>
             <b style = {{
