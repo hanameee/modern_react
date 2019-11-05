@@ -94,7 +94,7 @@ const onToggle = id => {
 };
 ```
 
-App.js의 `onCreate`, `onRemove`, `onToggle` 은 App 컴포넌트가 리렌더링 될 때마다 새로 만들어진다. useCallback을 사용해 이 함수들을 재사용할 수 있다.
+App.js의 `onCreate`, `onRemove`, `onToggle` 은 App 컴포넌트가 리렌더링 될 때마다 새로 만들어진다. (chrome의 render - paint flashing으로 확인 가능)useCallback을 사용해 이 함수들을 재사용할 수 있다.
 
 ### 사용법
 
@@ -111,3 +111,64 @@ const onToggle = useCallback(
 
 ⚠️ 주의 - 함수 안에서 사용하는 state나 props (props로 받아온 함수 포함)가 있다면 꼭 deps 배열 안에 포함시켜야 함! 넣지 않는다면, 함수 내에서 해당 값들을 참조할 때 가장 최신 값을 참조 할 것이라고 보장할 수 없다.
 
+
+
+## React.memo 관련
+
+`React.memo` 를 통해 컴포넌트의 props가 바뀌지 않았다면 리렌더링을 방지하여 컴포넌트의 리렌더링 성능 최적화를 해줄 수 있다. (= 컴포넌트에서 리렌더링이 필요한 상황에서만 리렌더링을 하도록)
+
+### 사용법
+
+그냥 해당 함수를 React.memo로 감싸주면 된다. (export 할 때, 혹은 선언할 때)
+
+`UserList.js`
+
+```react
+import React, { useEffect } from 'react';
+
+// 이렇게 감싸준다!
+const User = React.memo(function User({ user, onRemove, onToggle }){
+  ...
+});
+
+function UserList({users, onRemove, onToggle}) {
+  return (
+    <div>
+        {users.map(user => (
+            <User user = {user} onRemove = {onRemove} onToggle = {onToggle} key = {user.id} />
+        ))}
+    </div>
+  );
+}
+// 요렇게 감싸준다!
+export default React.memo(UserList);
+```
+
++)추가적으로, React.memo 에서 두번째 파라미터에 `propsAreEqual` 이라는 함수를 사용하여 특정 값들만 비교를 하는 것도 가능함
+
+```javascript
+export default React.memo(
+  UserList,
+  (prevProps, nextProps) => prevProps.users === nextProps.users
+);
+```
+
+하지만, 이걸 잘못사용한다면 오히려 의도치 않은 버그들이 발생하기 쉽습니다. 예를 들어서, 함수형 업데이트로 전환을 안했는데 이렇게 users 만 비교를 하게 된다면, onToggle 과 onRemove 에서 최신 users 배열을 참조하지 않으므로 심각한 오류가 발생 할 수 있다.
+
+## 함수형 업데이트 관련
+
+모든 함수(onCreate, onToggle, onRemove)의 useCallback에 `users` 가 deps에 포함되어 있기 때문에, users 배열 중 하나라도 변경되면 모든 user 들이 변경되고, 각 함수들이 새로 만들어지게 된다.
+
+이걸 최적화 하기 위해선 함수들의 deps에서 users를 지우고, 대신 setUsers 에 다음 상태를 파라미터로 넣어주는 것이 아니라, 값을 업데이트 하는 함수를 파라미터로 넣어준다! (=함수형 업데이트)
+
+이렇게 하면 setUsers 에 등록하는 콜백함수의 파라미터에서 최신 `users` 를 참조할 수 있기에 deps에 users를 넣지 않아도 됨. 따라서 하나의 user가 바뀌었다고 매번 모든 users가 리렌더링 되지 않음.
+
+
+
+### ⚠️ 최적화 관련 주의사항
+
+`useCallback`, `useMemo`, `React.memo` 는 컴포넌트의 성능을 실제로 개선할수있는 상황에서만 해라!
+
+예를 들어서, User 컴포넌트에 `b` 와 `button` 에 `onClick` 으로 설정해준 함수들은, 해당 함수들을 `useCallback` 으로 재사용한다고 해서 리렌더링을 막을 수 있는것은 아니므로, 굳이 그렇게 할 필요 없다.
+
+추가적으로, **렌더링 최적화 하지 않을 컴포넌트에 React.memo 를 사용하는것은, 불필요한 props 비교만 하는 것**이기 때문에 실제로 렌더링을 방지할 수 있는 상황이 있는 경우에만 사용하자!
