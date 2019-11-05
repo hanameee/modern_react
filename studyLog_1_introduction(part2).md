@@ -17,9 +17,9 @@ useEffect는 반드시 **function** 을 argument로 받음. 이 함수 = useEffe
 
 - `useEffect` 의 두번째 파라미터 = 의존값이 들어있는 배열 (deps)
 
-  - deps 배열으로 빈 배열을 주면? 컴포넌트가 처음 나타날 때만 effect 함수가 호출된다.
-  - deps 배열에 특정 값을 주면? 처음 마운트 될 때, 해당 값이 바뀔 때, 언마운트 될 때, 값이 바뀌기 직전에 호출이 됨.
-  - deps 배열 (= useEffect()의 두번째 파라미터)을 생략하면? 컴포넌트가 Virtual DOM에 리렌더링 될 때마다 호출됨
+  - deps 배열으로 **빈 배열**을 주면? 컴포넌트가 처음 나타날 때만 effect 함수가 호출된다.
+  - deps 배열에 **특정 값**을 주면? 처음 마운트 될 때, 해당 값이 바뀔 때, 언마운트 될 때, 값이 바뀌기 직전에 호출이 됨.
+  - deps 배열 (= useEffect()의 두번째 파라미터)을 **생략**하면? 컴포넌트가 Virtual DOM에 리렌더링 될 때마다 호출됨
 
 `useEffect` 안에서 사용하는 상태나, props 가 있다면, `useEffect` 의 `deps` 에 넣어주어야 합니다. 그렇게 하는게, 규칙입니다.
 
@@ -68,3 +68,46 @@ const count = useMemo(() => countActiveUsers(users), [users])
 이렇게 memo를 사용하지 않으면, users.activer가 바뀔 때 뿐만 아니라 input값이 바뀌어 컴포넌트가 리렌더링 될 때도 항상 countActiveUsers가 실행되게 된다.
 
 memo를 사용해 users가 변경될 때만 함수를 호출해 값을 연산함으로써 성능 최적화가 가능하다.
+
+
+
+## useCallback 관련
+
+useCallback은 useMemo와 비슷한 Hook!
+
+|             useMemo             |                     useCallback                      |
+| :-----------------------------: | :--------------------------------------------------: |
+| 특정 결과값을 재사용 할 때 사용 | 특정 함수를 새로 만들지 않고 재사용 하고 싶을때 사용 |
+
+`App.js`
+
+```react
+const onCreate = () => {
+  ...
+};
+
+const onRemove = id => {
+  ...
+};
+const onToggle = id => {
+  ...
+};
+```
+
+App.js의 `onCreate`, `onRemove`, `onToggle` 은 App 컴포넌트가 리렌더링 될 때마다 새로 만들어진다. useCallback을 사용해 이 함수들을 재사용할 수 있다.
+
+### 사용법
+
+```react
+// 첫번째 파라미터 - 원래 함수, 두번째 파라미터 - deps 배열
+const onToggle = useCallback(
+  id => {
+    setUsers(
+      users.map(user => (user.id === id) ? {...user, active: !user.active} : user)
+    )
+  },[users]
+)
+```
+
+⚠️ 주의 - 함수 안에서 사용하는 state나 props (props로 받아온 함수 포함)가 있다면 꼭 deps 배열 안에 포함시켜야 함! 넣지 않는다면, 함수 내에서 해당 값들을 참조할 때 가장 최신 값을 참조 할 것이라고 보장할 수 없다.
+
