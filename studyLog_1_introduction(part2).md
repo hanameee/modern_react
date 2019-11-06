@@ -233,3 +233,169 @@ const [state, dispatch] = useReducer(reducer, initialState);
 
 useReducer에 넣는 첫번째 파라미터는 **reducer 함수**, 두번째 파라미터는 **초기 상태**
 
+
+
+### useReduce 코드 적용 예시
+
+```react
+function reducer(state, action) {
+  	// action 선언부
+    switch(action.type) {
+        case 'CHANGE_INPUT':
+            return {
+                ...state,
+                inputs : {
+                    ...state.inputs,
+                    [action.name] : action.value
+                }
+            };
+        case 'CREATE_USER':
+            return {
+                inputs : initialState.inputs,
+                users : state.users.concat(action.user)
+            };
+        case 'TOGGLE_USER':
+            return {
+                ...state,
+                users: state.users.map(user =>
+                    user.id === action.id ? { ...user, active: !user.active} : user
+                    )
+            };
+        case 'REMOVE_USER':
+            return {
+                ...state,
+                users: state.users.filter(user => user.id != action.id)
+            };
+        default :
+            return state;
+    }
+}
+
+function App() {
+    const { username, email } = state.inputs; 
+    const [state, dispatch] = useReducer(reducer, initialState);
+    const nextId = useRef(4);
+
+    const { users } = state;
+		// dispatch 로 액션을 발생시켜 사용하는 부분
+    const onChange = useCallback(e => {
+        const {name, value} = e.target;
+        dispatch({
+            type : 'CHANGE_INPUT',
+            name,
+            value
+        });
+    }, [])
+
+    const onCreate = useCallback(() => {
+        console.log(`나는 onCreate고, nextId.current는 ${nextId.current}`);
+        dispatch({
+            type : 'CREATE_USER',
+            user : {
+                id : nextId.current,
+                username,
+                email
+            }
+        });
+        reset();
+        nextId.current ++;
+    }, [username, email]);
+```
+
+
+
+## custom Hooks 관련
+
+input을 관리하는 코드처럼, 컴포넌트를 만들때 특정 로직이 반복되는 경우, custom hooks를 만들어서 반복되는 로직을 쉽게 재사용할 수 있다. 
+
+### 사용법
+
+useState, useEffect, useCallback 등 Hooks를 사용하여 원하는 기능을 구현해주고, 컴포넌트에서 사용하고 싶은 값들을 반환해주면 된다 :)
+
+`useInputs.js`  보통 커스텀 hooks는 이렇게 `use` 라는 키워드로 시작하는 파일을 만들고 그 안에 함수를 작성한다.
+
+```react
+import { useState, useCallback } from 'react'
+
+function useInputs(initialForm) {
+  const [form, setForm] = useState(initialForm);
+  // change
+  const onchange = useCallback(e => {
+    const { name, value } = e.target;
+    setForm(form => ({...form, [name]: value}));
+  }, []);
+  const reset = useCallback(() => setForm(initialForm), [initialForm]);
+  return [form, onChange, reset];
+}
+
+export default useInputs;
+```
+
+이렇게 Input과 관련된 로직 (onChange, reset) 을 분리했으니,  `App.js` 에서도 기존 Input과 관련된 로직을 지워주고 useInputs로 대체한다.
+
+```react
+import React, { useRef, useReducer, useState, useMemo, useCallback } from "react";
+import UserList from "./UserList";
+import CreateUser from "./CreateUser";
+import useInputs from "./hooks/useInputs"
+function countActiveUsers(users) {
+    console.log('활성 유저 수를 세는 중...');
+    return users.filter(user => user.active).length;
+}
+
+...
+
+function reducer(state, action) {
+    switch(action.type) {
+        // *case 'CHANGE_INPUT' 삭제
+        case 'CREATE_USER':
+        		// *state.inputs를 initialState로 돌려놓던 로직 삭제
+            return {users : state.users.concat(action.user)};
+        case 'TOGGLE_USER':
+            return {
+                ...state,
+                users: state.users.map(user =>
+                    user.id === action.id ? { ...user, active: !user.active} : user
+                    )
+            };
+        case 'REMOVE_USER':
+            return {
+                ...state,
+                users: state.users.filter(user => user.id != action.id)
+            };
+        default :
+            return state;
+    }
+}
+
+function App() {
+    // const { username, email } = state.inputs; 
+    // inputs를 없애고 useInputs custom hook 로 대체
+    const [{username, email},onChange,reset] = useInputs({
+        username :'',
+        email : ''
+    })
+    const [state, dispatch] = useReducer(reducer, initialState);
+    const nextId = useRef(4);
+
+    const { users } = state;
+
+    const onCreate = useCallback(() => {
+        console.log(`나는 onCreate고, nextId.current는 ${nextId.current}`);
+        dispatch({
+            type : 'CREATE_USER',
+            user : {
+                id : nextId.current,
+                username,
+                email
+            }
+        });
+      	// onCreate에 useInputs 커스텀 hook의 reset 추가
+        reset();
+        nextId.current ++;
+    }, [username, email]);
+
+... // 이후 코드 동일
+
+```
+

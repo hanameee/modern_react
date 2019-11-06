@@ -154,7 +154,7 @@ export default App;
 
 `useState` 를 통해 함수형 컴포넌트에서 state를 관리할 수 있다.
 
-[사용법]
+### 사용법
 
 `const [state, setState] = useState(initialState);`
 
