@@ -7,7 +7,7 @@ Modern React 강의를 통해 새롭게 알게된 내용 위주로 정리합니�
 
 useEffect는 반드시 **function** 을 argument로 받음. 이 함수 = useEffect() 를 통해 전달된 함수 = effect 는 모든 render cycle마다 실행된다. 즉, 마운트 & 업데이트 되었을 때 실행된다는 것!
 
-"React 는 effect 를 기억했다가 DOM update가 이뤄진 후에 effect 를 call 한다. 즉, React는 effect 가 실행된 시점에서 update가 이뤄져있는 것을 보장한다."
+"React 는 effect 를 기억했다가 DOM update가 이뤄진 후에 effect 를 call 한다. 즉, React는 effect 가 실행된 시점에서 update가 이뤄져있는 것을 [보장한다](###짜잔)."
 
 ### 사용법
 

@@ -1,4 +1,18 @@
-# React Hook 정리
+# React Hook 정리🌻
+
+[공식 API문서](https://ko.reactjs.org/docs/hooks-reference.html#usestate)
+
+|         기본 Hook         |      추가 Hooks       |
+| :-----------------------: | :-------------------: |
+| [useState](#1. useState)  |      useReducer       |
+| [useEffect](2. useEffect) |      useCallback      |
+|        useContext         |        useMemo        |
+|                           | [useRef](# 3. useRef) |
+|                           |  useImperativeHandle  |
+|                           |    useLayoutEffect    |
+|                           |     useDebugValue     |
+
+
 
 ## 1. useState
 
@@ -6,7 +20,7 @@
 
 - 함수형 컴포넌트에서 state를 관리하기 위해 사용
 - **리턴값** : 상태 유지 값(`state`)과,  그 값을 갱신하는 함수(`setState`)를 리턴
-- **파라미터** : 첫 번째 전달된 파라미터(`initialState`)는 최초 렌더링 시 반환되는 state 값
+- **파라미터** : 최초 렌더링 시 반환되는 state 값 = 처음 전달된 파라미터(`initialState`)
 
 ### useState 사용법
 
@@ -91,20 +105,125 @@ setState(prevState => prevState.concat(updatedValues))
 
 
 ## 2. useEffect
+### useEffect 쓰임새
+
+
+
+### useEffect 사용법
 
 
 
 ## 3. useRef
 
+### useRef 쓰임새
+
+
+
+### useRef 사용법
+
 
 
 ## 4. useMemo
+
+### useMemo 쓰임새
+
+
+
+### useMemo 사용법
 
 
 
 ## 5. useCallback
 
+### useCallback 쓰임새
+
+
+
+### useCallback 사용법
 
 
 ## 6. useReducer
+### useReducer 쓰임새
 
+- `useState` 의 *대체 함수*
+- `(state, action) => newState` 의 형태로 reducer을 받아 state 와 dispatch메서드를 반환
+- **리턴값** : [state, dispatch]
+- **파라미터** : reducer
+
+### useReducer 사용법
+
+`reducer 사용법`
+
+```react
+function reducer(state, action){
+  // 새로운 상태를 만드는 로직
+  // const nextState = ...
+  return nextState;
+}
+
+// 혹은 아래처럼 간략하게 쓸 수도 있다
+function reducer(state, action) => newStatae
+```
+
+`useReducer` 사용법
+
+```react
+// 초기 state를 두번째 파라미터로 전달(=initialArg)해 state를 초기화할 수 있다
+const [state, dispatch] = useReducer(reducer, initialArg, init);
+```
+
+`useReducer` 을 사용해 다시 구현한 counter 예제
+
+```react
+const initialState = {count: 0};
+
+function reducer(state, action) {
+  // reducer에서 action 선언
+  switch (action.type) {
+    case 'increment':
+      return {count: state.count + 1};
+    case 'decrement':
+      return {count: state.count - 1};
+    default:
+      throw new Error();
+  }
+}
+
+function Counter() {
+  // useReducer은 state와 dispatch 메서드 반환
+  const [state, dispatch] = useReducer(reducer, initialState);
+  return (
+    <>
+      Count: {state.count}
+      <button onClick={() => dispatch({type: 'decrement'})}>-</button>
+      <button onClick={() => dispatch({type: 'increment'})}>+</button>
+    </>
+  );
+}
+```
+
+### useReducer vs useState
+
+어떨 때 `useReducer` 를 쓰고 어떨 때 `useState` 를 써야 할까? 그때 그때 다르다.
+
+일반적으로는 다수의 하윗값을 포함하는 **복잡한 정적 로직을 만드는 경우**나 **다음 state가 이전 state에 의존적인 경우**에 보통 `useState`보다 `useReducer`를 선호한다고 한다.
+
+그러나 컴포넌트에서 관리하는 값이 딱 하나고, 그 값이 단순한 숫자, 문자열 또는 boolean 값이라면  아래처럼`useState` 로 관리하는게 훨씬 편할 것.
+
+```javascript
+const [value, setValue] = useState(true);
+```
+
++) 벨로퍼트 님 같은 경우에는 아래처럼 setter 를 한 함수에서 여러번 사용해야 하는 일이 발생한다면
+
+```javascript
+setUsers(users => users.concat(user));
+setInputs({
+  username: '',
+  email: ''
+});
+```
+
+그 때부터 `useReducer` 를 쓸까? 에 대한 고민을 시작하신다고 함.
+
+useReducer 를 썼을때 편해질 것 같으면 useReducer 를 쓰고, 딱히 그럴것같지 않으면 useState 를 사용하기!
