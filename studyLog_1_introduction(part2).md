@@ -381,7 +381,8 @@ function App() {
     const { users } = state;
 
     const onCreate = useCallback(() => {
-        console.log(`나는 onCreate고, nextId.current는 ${nextId.current}`);
+ 
+      console.log(`나는 onCreate고, nextId.current는 ${nextId.current}`);
         dispatch({
             type : 'CREATE_USER',
             user : {
@@ -398,4 +399,32 @@ function App() {
 ... // 이후 코드 동일
 
 ```
+
+
+
+## Context API 관련
+
+리액트의 `Context API` 를 사용하면, 프로젝트 안에서 전역적으로 사용 할 수 있는 값을 관리 할 수 있다. 
+
+앞서 배운 dispatch와 Context API를 사용해 특정 함수를 원하는 컴포넌트에게 전달하기 위해 여러개의 컴포넌트를 거쳐야 하는  복잡한 구조를 해결할 수 있다.
+
+### 사용법
+
+`React.createContext` 함수를 사용한다.
+
+```javascript
+const UserDispatch = React.createContext(null);
+```
+
+- 파라미터에는  Context 의 기본값을 설정한다 (Context 를 쓸 때 값을 따로 지정하지 않을 경우 사용되는 디폴트값)
+
+  
+
+Context를 만든 이후에는 Context 안의 `Provider` 컴포넌트를 통해 Context의 값을 정할 수 있다. ( `value` 라는 값 설정)
+
+```javascript
+<UserDispatch.Provider value={dispatch}>...</UserDispatch.Provider>
+```
+
+이렇게 설정해주고 나면, Provider 에 의하여 감싸진 컴포넌트라면 어디서든 Context 의 값을 다른 곳에서 바로 조회해서 사용할 수 있다!
 
