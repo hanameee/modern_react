@@ -56,10 +56,13 @@ function reducer(state, action) {
     }
 }
 
+// contextAPI 사용부
+export const UserDispatch = React.createContext(null);
+
 function App() {
     // const { username, email } = state.inputs; 
     // inputs를 없애고 useInputs custom hook 로 대체
-    const [{username, email},onChange,reset] = useInputs({
+    const [{username, email}, onChange, reset] = useInputs({
         username :'',
         email : ''
     })
@@ -82,19 +85,19 @@ function App() {
         nextId.current ++;
     }, [username, email]);
 
-    const onToggle = useCallback(id => {
-        dispatch({
-            type : 'TOGGLE_USER',
-            id
-        })
-    }, []);
+    // const onToggle = useCallback(id => {
+    //     dispatch({
+    //         type : 'TOGGLE_USER',
+    //         id
+    //     })
+    // }, []);
 
-    const onRemove = useCallback(id => {
-        dispatch({
-            type : 'REMOVE_USER',
-            id
-        })
-    }, [])
+    // const onRemove = useCallback(id => {
+    //     dispatch({
+    //         type : 'REMOVE_USER',
+    //         id
+    //     })
+    // }, [])
 
     const count = useMemo(() => countActiveUsers(users), [users]);
     return (

@@ -419,21 +419,92 @@ function App() {
 
 ### 사용법
 
-`React.createContext` 함수를 사용한다.
+1) `React.createContext` 함수를 사용해 context를 생성한다
 
 ```javascript
 const UserDispatch = React.createContext(null);
 ```
 
-- 파라미터에는  Context 의 기본값을 설정한다 (Context 를 쓸 때 값을 따로 지정하지 않을 경우 사용되는 디폴트값)
+- 파라미터 -  Context 의 기본값 (Context 를 쓸 때 값을 따로 지정하지 않을 경우 사용되는 디폴트값)
 
-  
+2) Context를 만든 이후에는 Context 안의 `Provider` 컴포넌트를 통해 Context의 값을 정할 수 있다. ( `value` 라는 값 설정)
 
-Context를 만든 이후에는 Context 안의 `Provider` 컴포넌트를 통해 Context의 값을 정할 수 있다. ( `value` 라는 값 설정)
-
-```javascript
+```react
 <UserDispatch.Provider value={dispatch}>...</UserDispatch.Provider>
 ```
 
-이렇게 설정해주고 나면, Provider 에 의하여 감싸진 컴포넌트라면 어디서든 Context 의 값을 다른 곳에서 바로 조회해서 사용할 수 있다!
+이렇게 설정해주고 나면, Provider 에 의하여 감싸진 컴포넌트라면 어디서든 Context 의 값을 다른 곳에서 바로 조회해서 사용할 수 있다.
 
+```react
+// contextAPI 생성
+export const UserDispatch = React.createContext(null);
+```
+
+```React
+// contextAPI 사용
+import { UserDispatch } from './App';
+...
+// useContext hook 을 사용
+const text = useContext(MyContext);
+// 값 변경 시에는 Provider 사용
+<text.Provider value = {something}>...</text.Provider>
+```
+
+ 
+
+### 예제
+
+text ('Hello?') Props 를 ContextSample 에서  > GrandParent > Parent > Child 로 넘기는 예제
+
+```react
+function Child({text}) {
+    return <div>안녕하세요? {text}</div>
+}
+
+function Parent({text}) {
+ return <Child text = {text}/>
+}
+
+function GrandParent({text}) {
+ return <Parent text = {text}/>
+}
+
+function ContextSample() {
+   return <GrandParent text = 'Hello?'/>
+}
+```
+
+이걸 Context API를 사용해서 한꺼번에 넘겨보기
+
+```react
+import React, { createContext, useContext, useState } from 'react';
+
+const MyContext = createContext('defaultValue')
+
+function Child() {
+    const text = useContext(MyContext);
+    return <div>안녕하세요? {text}</div>
+}
+
+function Parent() {
+    return <Child />
+}
+
+function GrandParent() {
+    return <Parent />
+}
+
+function ContextSample() {
+    const [value, setValue] = useState(true);
+    return (
+        <MyContext.Provider value = {value ? 'GOOD' : 'BAD'}>
+            <GrandParent/>
+            <button onClick = {()=> setValue(!value)}>CLICK ME</button>
+        </MyContext.Provider>
+    );
+}
+
+export default ContextSample;
+```
+
+이렇게 Context API를 사용하면 여러 Child에서 바로 MyContext를 참조할 수 있다.

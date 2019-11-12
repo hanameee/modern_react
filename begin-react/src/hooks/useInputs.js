@@ -44,7 +44,8 @@ function useInputs(initialForm) {
     }, []);
     //reset
     const reset = useCallback(() => dispatch({
-        type : 'RESET'
+        type : 'RESET',
+        initialForm : initialForm
     }), []);
     return [form, onChange, reset];
 }
