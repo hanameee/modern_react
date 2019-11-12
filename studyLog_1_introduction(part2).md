@@ -510,4 +510,3 @@ export default ContextSample;
 이렇게 Context API를 사용하면 여러 Child에서 바로 MyContext를 참조할 수 있다.
 
 특정 함수를 여러 component를 거쳐 전달해줘야 한다면, dispatch를 관리해주는 context를 만들어서 사용하면 구조도 깔끔해지고 사용하기 편리하다! 코드는 tutorial 참고.
-
