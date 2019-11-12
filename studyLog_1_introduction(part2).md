@@ -444,7 +444,7 @@ export const UserDispatch = React.createContext(null);
 // contextAPI 사용
 import { UserDispatch } from './App';
 ...
-// useContext hook 을 사용
+// useContext hook 을 사용해서 컴포넌트 내부에서 context를 바로 조회할 수 있다
 const text = useContext(MyContext);
 // 값 변경 시에는 Provider 사용
 <text.Provider value = {something}>...</text.Provider>
@@ -482,7 +482,7 @@ import React, { createContext, useContext, useState } from 'react';
 const MyContext = createContext('defaultValue')
 
 function Child() {
-    const text = useContext(MyContext);
+    const text = useContext(MyContext); // 이 hook 덕분에 Child 내부에서 context를 바로 조회 가능
     return <div>안녕하세요? {text}</div>
 }
 
@@ -508,3 +508,6 @@ export default ContextSample;
 ```
 
 이렇게 Context API를 사용하면 여러 Child에서 바로 MyContext를 참조할 수 있다.
+
+특정 함수를 여러 component를 거쳐 전달해줘야 한다면, dispatch를 관리해주는 context를 만들어서 사용하면 구조도 깔끔해지고 사용하기 편리하다! 코드는 tutorial 참고.
+
