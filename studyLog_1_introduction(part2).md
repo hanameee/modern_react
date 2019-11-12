@@ -111,7 +111,16 @@ const onToggle = useCallback(
 
 ⚠️ 주의 - 함수 안에서 사용하는 state나 props (props로 받아온 함수 포함)가 있다면 꼭 deps 배열 안에 포함시켜야 함! 넣지 않는다면, 함수 내에서 해당 값들을 참조할 때 가장 최신 값을 참조 할 것이라고 보장할 수 없다.
 
+🤔 **deps에 빈 배열을 넣는거랑, 아예 생략하는거랑 차이가 있나?**
 
+[참고 링크 - What's the difference between `useCallback` with an empty array as inputs and `useCallback` without a second parameter? ](https://stackoverflow.com/questions/55026139/whats-the-difference-between-usecallback-with-an-empty-array-as-inputs-and-u)
+
+정리하자면, `useMemo` 나 `useCallback` 모두 
+
+- 두번째 파라미터인 deps 배열이 빈배열로 주어지면 value는 memoized 된다.
+- deps 배열이 생략되면 value는 memoized 되지 않고 어떠한 역할도 하지 못하게 된다.
+
+따라서 deps 배열은 mandatory라고 할 수 있겠다 :)
 
 ## React.memo 관련
 
