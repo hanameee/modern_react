@@ -409,6 +409,7 @@ export default UserList;
 
 - Spread 연산자
 - Concat 사용
+- Filter, Map. reduce 등 새로운 배열을 리턴하는 메소드 사용 ([참고 링크]([https://medium.com/@Dongmin_Jang/javascript-15%EA%B0%80%EC%A7%80-%EC%9C%A0%EC%9A%A9%ED%95%9C-map-reduce-filter-bfbc74f0debd](https://medium.com/@Dongmin_Jang/javascript-15가지-유용한-map-reduce-filter-bfbc74f0debd)))
 
 `App.js`
 
