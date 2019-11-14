@@ -153,3 +153,28 @@ class Counter extends Component {
 export default Counter;
 ```
 
+
+
+## Useful tools - Snippet
+
+코드 조각 =  자주 사용되는 코드에 대하여 단축어를 만들어서 코드를 빠르게 생성해내기!
+
+```react
+import React from 'react';
+
+function ${TM_FILENAME_BASE}() { //파일 이름 변수
+  return (
+  	<div>
+    	${1} {/* 코드 생성했을때 텍스트 커서가 맨 처음 위치할 곳*/}
+    </div>
+  )
+}
+
+export default ${TM_FILENAME_BASE};
+```
+
+[Snippet Generator 사이트](https://snippet-generator.app/) 에서 변환한 뒤
+
+`Code` > `Preference` > `User Snippets` 의 javascriptreact.json 에 붙여넣기!
+
+이후 prefix (Tab Trigger) 로 등록한 단축키로 사용하면 된다. 언어 설정을 javascriptreact 로 바꿔줘야 한다는 것 유의.
