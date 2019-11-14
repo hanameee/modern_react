@@ -73,3 +73,83 @@ import produce from 'immer'; // 보통 produce란 이름으로 불러온다
 데이터 구조가 복잡해져서 불변성을 유지하기 힘들어졌을때 immer를 쓰자! 가급적 데이터구조가 복잡해지지 않게 하는 것이 먼저겠지? 🤔
 
 immer를 사용한다고 해도, 필요한 곳에만 쓰는 것이 좋다!
+
+
+
+## Class based Component - custom 메서드 this 문제
+
+```react
+import React, { Component } from 'react';
+
+class Counter extends Component {
+  	// custom method 에서
+    handleIncrease() {
+        console.log('increase');
+        console.log(this) // this가 undefined로 뜬다
+    }
+    handleDecrease() {
+        console.log('decrease');
+    }
+    render() {
+        return (
+            <>
+                <h1>number</h1>
+                <button onClick = {this.handleIncrease}>+1</button>
+                <button onClick = {this.handleDecrease}>-1</button>
+            </>
+        )
+    }
+}
+
+export default Counter;
+```
+
+왜 메서드 내에서 호출한 this가 undefined로 뜰까? 그 이유는 우리가 만든 메서드들을 각 button 들의 이벤트로 등록하게 되는 과정에서 각 메서드와 컴포넌트 인스턴스의 관계가 끊겨버리기 때문!
+
+### 해결법 1) 생성자 메서드 constructor 에서 bind 작업 해주기
+
+```react
+class Counter extends Component {
+    constructor(props){
+        super(props); // super을 호출하는 이유 : 클래스가 컴포넌트로서 작동할 수 있게 해주는 Component쪽의 생성자 함수를 먼저 실행해주고 우리가 할 작업을 하겠다는 뜻
+        this.handleIncrease = this.handleIncrease.bind(this);
+        this.handleDecrease = this.handleDecrease.bind(this);
+    }
+  ...
+```
+
+이렇게 `bind` 작업을 진행해주면 해당 함수에서 가르킬 this를 직접 설정해줄 수 있다. 가장 일반적인 방법 👍
+
+### 해결법 2) arrow function syntax 를 사용해 커스텀 메서드 만들기
+
+⚠️ **주의 : 정식 JS 뭄법이 아니며, Create-React-App 으로 만든 프로젝트에 적용되어있는 문법임**
+
+```react
+import React, { Component } from 'react';
+
+class Counter extends Component {
+  handleIncrease = () => {
+    console.log('increase');
+    console.log(this);
+  }
+  
+
+  handleDecrease = () => {
+    console.log('decrease');
+    console.log(this)
+  };
+
+  render() {
+    return (
+      <div>
+        <h1>0</h1>
+        <button onClick={this.handleIncrease}>+1</button>
+        <button onClick={this.handleDecrease}>-1</button>
+      </div>
+    );
+  }
+}
+
+export default Counter;
+```
+
