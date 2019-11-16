@@ -6,10 +6,24 @@ function App() {
     return (
         <div className="App">
             <div className="buttons">
+                <Button size="small">BUTTON</Button>
+                <Button>BUTTON</Button>
+                <Button size="large">BUTTON</Button>
+            </div>
+            <div className="buttons">
                 <Button size="small" color="gray">
                     BUTTON
                 </Button>
-                <Button>BUTTON</Button>
+                <Button color="gray">BUTTON</Button>
+                <Button size="large" color="gray">
+                    BUTTON
+                </Button>
+            </div>
+            <div className="buttons">
+                <Button size="small" color="pink">
+                    BUTTON
+                </Button>
+                <Button color="pink">BUTTON</Button>
                 <Button size="large" color="pink">
                     BUTTON
                 </Button>
