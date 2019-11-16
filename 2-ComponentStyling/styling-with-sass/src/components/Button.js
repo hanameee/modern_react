@@ -1,8 +1,13 @@
 import React from "react";
-import Buttom from "./Button.scss";
+import "./Button.scss";
 
-function Button({ childeren }) {
-    return <button className="Button">{childeren}</button>;
+function Button({ children, size }) {
+    return <button className={["Button", size].join(" ")}>{children}</button>;
+    // join 말고 className = {`Button ${size}`} 이렇게 할 수도 있다!
 }
+
+Button.defaultProps = {
+    size: "medium"
+};
 
 export default Button;
