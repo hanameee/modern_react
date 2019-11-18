@@ -22,6 +22,43 @@ classNames(null, false, 'bar', undefined, 0, 1, { baz: null }, ''); // => 'bar 1
 
 
 
+
+
+## react-icons 라이브러리 관련
+
+```bash
+$ yarn add react-icons
+```
+
+react-icons 라이브러리를 사용하면 Font Awesome, Ionicons, Material Design Icons, 등의 아이콘들을 컴포넌트 형태로 쉽게 사용 할 수 있음!
+
+[라이브러리 문서](https://react-icons.netlify.com/#/) 를 열어서 원하는 아이콘들을 불러와서 사용하면 됨.
+
+`사용 예시`
+
+```react
+import React from 'react';
+// material design icon 에서 불러오기
+import { MdCheckBox, MdCheckBoxOutlineBlank } from 'react-icons/md';
+
+function CheckBox({ children, checked, ...rest }) {
+  return (
+    <div>
+      <label>
+        <input type="checkbox" checked={checked} {...rest} />
+        {/* 이런 식으로 컴포넌트 형태로 불러와서 사용 */}
+        <div>{checked ? <MdCheckBox /> : <MdCheckBoxOutlineBlank />}</div>
+      </label>
+      <span>{children}</span>
+    </div>
+  );
+}
+
+export default CheckBox;
+```
+
+
+
 ## ...rest props
 
 컴포넌트가 어떤 props 를 받을 지 확실치는 않지만 그대로 다른 컴포넌트 또는 HTML 태그에 전달을 해주어야 하는 상황에는  `...rest` 문법을 활용하면 된다.
