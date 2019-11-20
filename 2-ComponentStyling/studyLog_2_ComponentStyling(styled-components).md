@@ -78,3 +78,77 @@ function App() {
 export default App;
 ```
 
+#### ThemeProvider
+
+[공식 API 문서](ThemeProviderhttps://www.styled-components.com/docs/api#themeprovider)
+
+ThemeProvider을 사용해서 **styled-components 로 만드는 모든 컴포넌트에서 조회하여 사용 할 수 있는 전역적인 값을 설정**할 수 있다.
+
+[사용법]
+
+`App.js`
+
+```react
+// ThemeProvider import 해오기
+import styled, { ThemeProvider } from 'styled-components';
+...
+
+function App() {
+  return (
+    // ThemeProvider로 전역 값 (객체) 설정
+    <ThemeProvider
+      theme={{
+        palette: {
+          blue: '#228be6',
+          gray: '#495057',
+          pink: '#f06595'
+        }
+      }}
+    >
+      <AppBlock>
+        <Button>BUTTON</Button>
+      </AppBlock>
+    </ThemeProvider>
+  );
+}
+...
+```
+ThemeProvider 에서 theme으로 설정한 값은 ThemeProvider 컴포넌트 내부에 렌더링된 styled-components로 만든 컴포넌트에서 palette를 조회해서 사용할 수 있다!
+
+`Button.js`
+
+```react
+import React from 'react';
+import styled, { css } from 'styled-components';
+import { darken, lighten } from 'polished';
+
+const StyledButton = styled.button`
+	...
+  /* 이런 식으로 props.theme.palette 를 조회해서 사용할 수 있다 */
+  ${props => {
+    const selected = props.theme.palette.[props.color];
+    return css`
+      background: ${selected};
+      &:hover {
+        background: ${lighten(0.1, selected)};
+      }
+      &:active {
+        background: ${darken(0.1, selected)};
+      }
+    `;
+  }}
+
+```
+
+
+
+## polished 라이브러리
+
+```bash
+$ yarn add polished
+```
+
+SCSS 에서 사용했던 `lighten()` `darken()` 같은 유틸함수를 styled component 에서도 사용할 수 있게끔 해주는 라이브러리 **polished**!
+
+
+
