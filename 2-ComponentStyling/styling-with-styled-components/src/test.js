@@ -18,18 +18,20 @@ const colorStyles = css`
 `;
 
 const sizeStyles = css`
-    ${props =>
-        props.size === "large" &&
-        css`
-            height: 3rem;
-            font-size: 1.25rem;
-        `}
-    ${props =>
-        props.size === "medium" &&
-        css`
-            height: 2.25rem;
-            font-size: 1rem;
-        `}
+  ${props =>
+      props.size === "large" &&
+      css`
+          height: 3rem;
+          font-size: 1.25rem;
+      `}
+
+  ${props =>
+      props.size === "medium" &&
+      css`
+          height: 2.25rem;
+          font-size: 1rem;
+      `}
+
     ${props =>
         props.size === "small" &&
         css`
