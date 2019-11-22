@@ -159,7 +159,21 @@ p {}
 // 이렇게 DialogBlock 내에서 한꺼번에 작성해서 h3과 p에게 특정 스타일을 줄 수 있다!
 ```
 
+#### styledComponent 의 styled extended component 만들기
 
+기존 button styledcomponent 에서 특정 style만 커스터마이징 (ex.margin)  하고 싶다면? 아래와 같이 `styled(기존컴포넌트)` 로 extend 한 뒤 내부에 커스텀할 css code를 작성하면 된다.
+
+```react
+const MyComponent = ({ className }) => {
+  return <div className={className}></div>
+};
+
+const ExtendedComponent = styled(MyComponent)`
+  background: black;
+`;
+```
+
+⚠️ 주의할 점 : 이렇게 컴포넌트의 스타일을 커스터마이징 할 때에는 해당 컴포넌트에서 `className` props 가 내부 엘리먼트에게 전달이 되고 있는지 확인해주어야 한다. (예제의 Button 컴포넌트의 경우 className props가 `...rest` 를  통해 전달됨)
 
 ## polished 라이브러리
 
