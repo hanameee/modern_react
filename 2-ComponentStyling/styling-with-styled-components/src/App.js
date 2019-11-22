@@ -42,7 +42,9 @@ function App() {
         >
             <AppBlock>
                 <ButtonGroup>
-                    <Button size="large">BUTTON</Button>
+                    <Button size="large" outline>
+                        BUTTON
+                    </Button>
                     <Button>BUTTON</Button>
                     <Button size="small">BUTTON</Button>
                 </ButtonGroup>
@@ -61,6 +63,17 @@ function App() {
                     </Button>
                     <Button color="pink">BUTTON</Button>
                     <Button color="pink" size="small">
+                        BUTTON
+                    </Button>
+                </ButtonGroup>
+                <ButtonGroup>
+                    <Button size="large" fullWidth>
+                        BUTTON
+                    </Button>
+                    <Button size="large" color="gray" fullWidth>
+                        BUTTON
+                    </Button>
+                    <Button size="large" color="pink" fullWidth>
                         BUTTON
                     </Button>
                 </ButtonGroup>
