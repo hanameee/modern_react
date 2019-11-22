@@ -84,6 +84,8 @@ export default App;
 
 ThemeProvider을 사용해서 **styled-components 로 만드는 모든 컴포넌트에서 조회하여 사용 할 수 있는 전역적인 값을 설정**할 수 있다.
 
+⚠️ ThemeProvider 내부는 하나의 리액트 엘리먼트로 감싸져있어야 한다.
+
 [사용법]
 
 `App.js`
@@ -138,6 +140,23 @@ const StyledButton = styled.button`
     `;
   }}
 
+```
+
+#### nested CSS 문법
+
+DialogBlock 안에 h3과 p 태그가 있을 때, 굳이 각각을 styled component로 만들지 않고도 **Nested CSS 문법**을 사용해 한꺼번에 특정 스타일을 줄 수 있다.
+
+```react
+const DialogBlock = styled.div``;
+const Title = styled.h3``;
+const Description = styled.p``;
+// 위처럼 하나하나 선언해줄 필요가 없고
+
+const DialogBlock = styled.div`
+h3 {}
+p {}
+`
+// 이렇게 DialogBlock 내에서 한꺼번에 작성해서 h3과 p에게 특정 스타일을 줄 수 있다!
 ```
 
 
