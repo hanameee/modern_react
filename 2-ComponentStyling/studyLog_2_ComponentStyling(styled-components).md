@@ -175,6 +175,38 @@ const ExtendedComponent = styled(MyComponent)`
 
 ⚠️ 주의할 점 : 이렇게 컴포넌트의 스타일을 커스터마이징 할 때에는 해당 컴포넌트에서 `className` props 가 내부 엘리먼트에게 전달이 되고 있는지 확인해주어야 한다. (예제의 Button 컴포넌트의 경우 className props가 `...rest` 를  통해 전달됨)
 
+#### transition 사용하기
+
+styled component 에서 CSS Keyframe을 사용하려면  `keyframes` 유틸을 사용한다.
+
+```react
+import React from 'react';
+import styled, { keyframes } from 'styled-components';
+import Button from './Button';
+
+// 애니메이션 효과의 이름은 마음대로 지정할 수 있음
+const fadeIn = keyframes`
+  from {
+    opacity: 0
+  }
+  to {
+    opacity: 1
+  }
+`;
+
+const slideUp = keyframes`
+  from {
+    transform: translateY(200px);
+  }
+  to {
+    transform: translateY(0px);
+  }
+`;
+
+```
+
+
+
 ## polished 라이브러리
 
 ```bash
