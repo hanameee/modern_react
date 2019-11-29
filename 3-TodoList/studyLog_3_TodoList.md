@@ -77,3 +77,47 @@ const Remove = styled.div`
 `;
 ```
 
+
+
+## Context API를 활용한 상태 관리
+
+ ### Context API 복습
+
+[용도]
+
+프로젝트 안에서 전역적으로 사용할 수 있는 값 관리.
+
+[사용법]
+
+1) `React.createContext` 함수를 사용해 context 를 생성
+
+```react
+const ContextName = react.createContext(null);
+// createContext의 파라미터 = context의 default 값
+```
+
+2) 생성한 context 안의 `Provider` 컴포넌트를 통해 context의 value 설정 가능
+
+```react
+<ContextName.Provider value = {valuename}>...</ContextName.Provider>
+```
+
+이후 Provider에 의해 감싸진 컴포넌트라면 어디서든 Context의 값을 바로 조회해서 사용 가능 (props 를 타고타고 넘길 필요 없이)
+
+```react
+// context 생성 및 export
+export const ContextName = React.createContext(null);
+```
+
+```react
+// useContext hook import 해오기
+import React, { useContext } from 'react';
+// 타 파일에서 context import 해오기
+import { ContextName } from './...'
+
+// useContext hook을 사용해 컴포넌트 내부에서 context 조회 가능
+function Sample() {
+  const state = useContext(ContextName);
+}
+```
+
