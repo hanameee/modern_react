@@ -450,7 +450,7 @@ const text = useContext(MyContext);
 <text.Provider value = {something}>...</text.Provider>
 ```
 
- 
+
 
 ### 예제
 
