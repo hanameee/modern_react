@@ -1,33 +1,58 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 import axios from "axios";
 
-function Users() {
-    const [users, setUsers] = useState(null);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
+function reducer(state, action) {
+    switch (action.type) {
+        case "LOADING":
+            return {
+                loading: true,
+                data: null,
+                error: null
+            };
+        case "SUCCESS":
+            return {
+                loading: false,
+                data: action.data,
+                error: null
+            };
+        case "ERROR":
+            return {
+                loading: false,
+                data: null,
+                error: action.error
+            };
+        default:
+            throw new Error(`Unhandled action type ${action.type}`);
+    }
+}
 
+function Users() {
+    const [state, dispatch] = useReducer(reducer, {
+        loading: false,
+        data: null,
+        error: null
+    });
     const fetchUsers = async () => {
+        dispatch({ type: "LOADING" });
         try {
-            setError(null);
-            setUsers(null);
-            setLoading(true);
             const response = await axios.get(
                 "https://jsonplaceholder.typicode.com/users"
             );
-            setUsers(response.data);
+            dispatch({ type: "SUCCESS", data: response.data });
         } catch (e) {
-            setError(e);
+            dispatch({ type: "ERRPR", error: e });
         }
-        setLoading(false);
     };
-
     useEffect(() => {
         fetchUsers();
     }, []);
-    // 빈 배열을 useEffect의 dependency로 주었으므로 렌더링이 시작되는 시점에 요청이 시작
+
+    const { loading, data: users, error } = state;
+
     if (loading) return <div>로딩중...</div>;
-    if (error) return <div>에러입니다!</div>;
+    if (error) return <div>에러가 발생했습니다 T^T!</div>;
     if (!users) return null;
+
     return (
         <>
             <ul>
@@ -37,9 +62,50 @@ function Users() {
                     </li>
                 ))}
             </ul>
-            <button onClick={fetchUsers}>다시 불러오기!</button>
+            <button onClick={fetchUsers}>다시 불러오기</button>
         </>
     );
 }
+
+// function Users() {
+//     const [users, setUsers] = useState(null);
+//     const [loading, setLoading] = useState(false);
+//     const [error, setError] = useState(null);
+
+//     const fetchUsers = async () => {
+//         try {
+//             setError(null);
+//             setUsers(null);
+//             setLoading(true);
+//             const response = await axios.get(
+//                 "https://jsonplaceholder.typicode.com/users"
+//             );
+//             setUsers(response.data);
+//         } catch (e) {
+//             setError(e);
+//         }
+//         setLoading(false);
+//     };
+
+//     useEffect(() => {
+//         fetchUsers();
+//     }, []);
+//     // 빈 배열을 useEffect의 dependency로 주었으므로 렌더링이 시작되는 시점에 요청이 시작
+//     if (loading) return <div>로딩중...</div>;
+//     if (error) return <div>에러입니다!</div>;
+//     if (!users) return null;
+//     return (
+//         <>
+//             <ul>
+//                 {users.map(user => (
+//                     <li key={user.id}>
+//                         {user.username} ({user.name})
+//                     </li>
+//                 ))}
+//             </ul>
+//             <button onClick={fetchUsers}>다시 불러오기!</button>
+//         </>
+//     );
+// }
 
 export default Users;
