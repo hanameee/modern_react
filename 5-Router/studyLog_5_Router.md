@@ -71,3 +71,32 @@ const App = () => {
 ```
 
 이러면 정확히 `/` 일때만 (경로가 완벽히 일치할때만) home 컴포넌트가 보여지게 된다.
+
+## 4. Link
+
+HTML5 의 `<a href = "...">` 는 페이지를 이동시키며 페이지를 아예 새로 불러온다. 페이지를 새로 불러오면 리액트 앱의 state도 초기화되고, rendered 된 컴포넌트들도 다 전부 새로 렌더링되는 결과가 나타나겠지?
+
+따라서 리액트에서는 a 태그 대신 Link 라는 컴포넌트를 사용한다. `Link` 컴포넌트는 [HTML5 History API](https://developer.mozilla.org/ko/docs/Web/API/History) 를 사용하여 브라우저의 주소만 바꾸고 페이지를 새로 불러오지 않는다.
+
+[사용법]
+
+```react
+function App() {
+    return (
+        <div>
+            <ul>
+                <li>
+                    <Link to="/">Home</Link>
+                </li>
+                <li>
+                    <Link to="/about">About</Link>
+                </li>
+            </ul>
+            <hr />
+            <Route path="/" exact component={Home} />
+            <Route path="/about" component={About} />
+        </div>
+    );
+}
+```
+
