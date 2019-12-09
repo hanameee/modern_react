@@ -217,3 +217,7 @@ const About = ({ location }) => {
 export default About;
 ```
 
+# Subroute
+
+서브라우트란? 라우트 내부의 라우트를 만드는 것을 의미
+

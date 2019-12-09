@@ -3,7 +3,7 @@ import { Route, Link } from "react-router-dom";
 import "./App.css";
 import Home from "./Home";
 import About from "./About";
-import Profile from "./Profile";
+import Profiles from "./Profiles";
 
 function App() {
     return (
@@ -22,7 +22,7 @@ function App() {
             <hr />
             <Route path="/" exact component={Home} />
             <Route path="/about" component={About} />
-            <Route path="/profiles/:username" component={Profile} />
+            <Route path="/profiles" component={Profiles} />
         </div>
     );
 }
