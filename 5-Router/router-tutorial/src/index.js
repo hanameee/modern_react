@@ -1,33 +1,18 @@
-Modern React 강의를 통해 새롭게 알게된 내용 위주로 정리합니다. 🙆🏻‍♀️
-
-# 프로젝트에 Router 적용하기
-
-## 1. 설치
-
-```bash
-$ yarn add react-router-dom
-```
-
-## 2. index.js 수정
-
-```react
 import React from "react";
 import ReactDOM from "react-dom";
-// 1. BrowserRouter 불러오기
 import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 
 ReactDOM.render(
-  	// 2. App컴포넌트를 BrowserRouter 컴포넌트로 감싸기기 
     <BrowserRouter>
         <App />
     </BrowserRouter>,
     document.getElementById("root")
 );
 
+// If you want your app to work offline and load faster, you can change
+// unregister() to register() below. Note this comes with some pitfalls.
+// Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
-
-```
-
