@@ -100,3 +100,57 @@ function App() {
 }
 ```
 
+## 5. URL 파라미터 사용하기
+
+`Router`은 로드된 route에 대한 여러 유용한 extra information 을 props로 넘겨준다. history, location, match 등등... (react-study section 11참고)
+
+이 중 `match` 객체 안의 params 값을 사용해서 파라미터를 사용할 수 있다. 
++) [match](https://reacttraining.com/react-router/web/api/match) 객체안에는 현재의 주소가 `Route` 컴포넌트에서 정한 규칙과 어떻게 일치하는지에 대한 정보가 들어있음!
+
+`Profile.js`
+
+```react
+import React from "react";
+
+const profileData = {
+    hannah: {
+        name: "이해나",
+        description: "나아는 해나다아아아으아"
+    },
+    jeongho: {
+        name: "남정호",
+        description: "나아는 정호다아아아으아"
+    }
+};
+
+// props로 제공된 extra information 중 우리가 사용할 것은 match 객체
+const Profile = ({ match }) => {
+    console.log(match);
+  	// 파라미터를 받아올 때는 match 안에 들어있는 params 값을 참조
+    const { username } = match.params;
+    const profile = profileData[username];
+    if (!profile) {
+        return <div>존재하지 않는 유저입니다</div>;
+    }
+    return (
+        <div>
+            <h3>
+                {username} ({profile.name})
+            </h3>
+            <p>{profile.description}</p>
+        </div>
+    );
+};
+
+export default Profile;
+
+```
+
+`App.js`
+
+```react
+<Route path="/profiles/:username" component={Profile} />
+```
+
+위와 같이 사용하고 주소에 직접 입력해보자 :)
+

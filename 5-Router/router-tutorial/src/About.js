@@ -1,6 +1,7 @@
 import React from "react";
 
-const About = () => {
+const About = ({ ...para }) => {
+    console.log(para);
     return (
         <div>
             <h1>ABOUT</h1>
