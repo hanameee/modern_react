@@ -11,9 +11,9 @@ const profileData = {
     }
 };
 
-const Profile = ({ match }) => {
-    console.log(match);
-    const { username } = match.params;
+const Profile = ({ ...params }) => {
+    console.log(params);
+    const { username } = params.match.params;
     const profile = profileData[username];
     if (!profile) {
         return <div>존재하지 않는 유저입니다</div>;

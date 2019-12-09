@@ -105,7 +105,22 @@ function App() {
 `Router`은 로드된 route에 대한 여러 유용한 extra information 을 props로 넘겨준다. history, location, match 등등... (react-study section 11참고)
 
 이 중 `match` 객체 안의 params 값을 사용해서 파라미터를 사용할 수 있다. 
-+) [match](https://reacttraining.com/react-router/web/api/match) 객체안에는 현재의 주소가 `Route` 컴포넌트에서 정한 규칙과 어떻게 일치하는지에 대한 정보가 들어있음!
+
++) [match](https://reacttraining.com/react-router/web/api/match) 객체란?
+match 객체 안에는 현재의 주소가 `Route` 컴포넌트에서 정한 규칙과 어떻게 일치하는지에 대한 정보가 들어있다. 아래 내용을 참고하자
+
+```react
+match: {
+  isExact: true
+  params: {username: "hannah"}
+  path: "/profiles/:username"
+  url: "/profiles/hannah"
+  __proto__: Object
+  staticContext: undefined  
+}
+```
+
+
 
 `Profile.js`
 
@@ -153,4 +168,52 @@ export default Profile;
 ```
 
 위와 같이 사용하고 주소에 직접 입력해보자 :)
+
+## Query
+
+**Parameter**이 match 객체의 params 값을 참조했다면, **Query**는 location 객체의 search 값을 참조한다! 
+
++) [location](https://reacttraining.com/react-router/web/api/location) 객체란?
+location 객체 안에는 현재 앱이 갖고있는 주소에 대한 정보가 들어있다. 아래 내용을 참고하자.
+
+```react
+location: {
+  hash: ""
+	key: "gsgk6d"
+	pathname: "/about"
+	search: ""
+	state: undefined
+	__proto__: Object
+}
+```
+
+`About.js`
+
+qs (query string) 라이브러리를 사용해 문자열 형태의 search 값을 객체로 변환해 줄 것임!
+
+```react
+import React from "react";
+import qs from "qs";
+
+// About 컴포넌트에서 search 값에있는 detail 값을 받아와서
+const About = ({ location }) => {
+    const query = qs.parse(location.search, {
+        ignoreQueryPrefix: true
+    });
+   // 그 detail 값이 true 일때 추가정보를 보여주도록!
+    const detail = query.detail === "true";
+    return (
+        <div>
+            <h1>ABOUT</h1>
+            <p>
+                이곳은 어바웃이에요. 이 프로젝트는 리액트 라우터 기초를
+                실습해보는 예제 프로젝트랍니다!
+            </p>
+            {detail && <p>추가적인 정보가 어쩌구 저쩌구</p>}
+        </div>
+    );
+};
+
+export default About;
+```
 
