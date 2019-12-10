@@ -1,17 +1,27 @@
 import React from "react";
-import { Link, Route } from "react-router-dom";
+import { NavLink, Route } from "react-router-dom";
 import Profile from "./Profile";
-
+import WithRouterSample from "./WithRouterSample";
 const Profiles = () => {
     return (
         <div>
             <h3>유저 목록</h3>
             <ul>
                 <li>
-                    <Link to="/profiles/hannah">hannah</Link>
+                    <NavLink
+                        to="/profiles/hannah"
+                        activeStyle={{ background: "black", color: "white" }}
+                    >
+                        hannah
+                    </NavLink>
                 </li>
                 <li>
-                    <Link to="/profiles/jeongho">jeongho</Link>
+                    <NavLink
+                        to="/profiles/jeongho"
+                        activeStyle={{ background: "black", color: "white" }}
+                    >
+                        jeongho
+                    </NavLink>
                 </li>
             </ul>
 
@@ -21,6 +31,7 @@ const Profiles = () => {
                 render={() => <div>유저를 선택해주세요</div>}
             />
             <Route path="/profiles/:username" component={Profile} />
+            <WithRouterSample />
         </div>
     );
 };

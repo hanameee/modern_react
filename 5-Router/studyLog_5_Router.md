@@ -219,5 +219,132 @@ export default About;
 
 # Subroute
 
-서브라우트란? 라우트 내부의 라우트를 만드는 것을 의미
+서브라우트란? 라우트 내부의 라우트를 만드는 것을 의미함.
+
+[사용법]
+
+컴포넌트를 만들고 그 안에 또 Route 컴포넌트를 렌더링하면 됨 :)
+
+```react
+import React from "react";
+// Route 컴포넌트 import
+import { Link, Route } from "react-router-dom";
+import Profile from "./Profile";
+
+const Profiles = () => {
+    return (
+        <div>
+            <h3>유저 목록</h3>
+            <ul>
+                <li>
+                    <Link to="/profiles/hannah">hannah</Link>
+                </li>
+                <li>
+                    <Link to="/profiles/jeongho">jeongho</Link>
+                </li>
+            </ul>
+            <Route
+                path="/profiles"
+                exact
+                render={() => <div>유저를 선택해주세요</div>}
+            />
+            <Route path="/profiles/:username" component={Profile} />
+        </div>
+    );
+};
+
+export default Profiles;
+
+```
+
+`<Route path="/profiles" exact render={() => <div>유저를 선택해주세요</div>/>`
+
+위와 같이 Route 컴포넌트에서 component 대신 **render**을 사용해 JSX를 리턴할 수도 있다. 이렇게 JSX 렌더링을 하게 되면, 상위에서 props나 기타 필요한 값들을 전달해 줄 수도 있다.
+
+# Extra functions of Router
+
+## history
+
+History 객체는 라우트로 사용된 컴포넌트에게 match, location 과 함께 전달되는 props 중 하나로, History 객체를 통해 우리가 컴포넌트 내에 구현하는 메소드에서 라우터에 직접 접근을 할 수 있다. (뒤로가기, 특정 경로로 이동, 이탈 방지 등)
+
+```react
+import React, { useEffect } from "react";
+
+function HistorySample({ history }) {
+  	// 뒤로가기
+    const goBack = () => {
+        history.goBack();
+    };
+  	// 특정 경로로 이동
+    const goHome = () => {
+        history.push("/");
+    };
+    useEffect(() => {
+        console.log(history);
+      	// 이탈 방지 메세지
+        const unblock = history.block("정말 떠나실건가요? T^T");
+        return () => {
+            unblock();
+        };
+    }, [history]);
+
+    return (
+        <div>
+            <button onClick={goBack}>뒤로가기</button>
+            <button onClick={goHome}>홈으로</button>
+        </div>
+    );
+}
+
+export default HistorySample;
+
+```
+
+## withRouter HOC
+
+라우터 컴포넌트가 아닌 곳에서 match, location, history를 사용해야 할 때 withRouter HOC를 사용하면 된다.
+
+withRouter을 사용하면 자신의 부모 컴포넌트 기준의 match 값이 전달되는 것에 유의!
+
+## switch
+
+switch는 여러 Route 들을 감싸서 그 중 규칙이 일치하는 라우트 단 하나만을 렌더링시켜준다. Switch 를 사용하면, 아무것도 일치하지 않았을때 보여줄 Not Found 페이지를 구현할 수도 있음.
+
+## NavLink
+
+NavLink는 Link와 유사하나, 만약 현재 경로와 Link에서 사용하는 경로가 일치할 경우 특정 스타일 혹은 클래스를 적용할 수 있는 컴포넌트!
+
+```react
+<ul>
+  <li>
+    <NavLink
+      to="/profiles/hannah"
+      activeStyle={{ background: "black", color: "white" }}
+      >
+      hannah
+    </NavLink>
+  </li>
+  <li>
+    <NavLink
+      to="/profiles/jeongho"
+      activeStyle={{ background: "black", color: "white" }}
+      >
+      jeongho
+    </NavLink>
+  </li>
+</ul>
+```
+
+요런 식으로 `activeStyle` 을 통해 현재 위치한 경로에 style을 줄 수 있고, 직접 스타일을 작성하는 것이 아니라 CSS 클래스를 적용하고 싶다면 `activeStyle` 대신 `activeClassName` 을 사용하면 됨!
+
+## 기타
+
+이 외의 리액트 라우터 기능들
+
+- **[Redirect](https://reacttraining.com/react-router/web/example/auth-workflow)**: 페이지를 리다이렉트 하는 컴포넌트
+- **[Prompt](https://reacttraining.com/react-router/web/example/preventing-transitions)**: 이전에 사용했던 history.block 의 컴포넌트 버전
+- **[Route Config](https://reacttraining.com/react-router/web/example/route-config)**: JSX 형태로 라우트를 선언하는 것이 아닌 Angular 나 Vue 처럼 배열/객체를 사용하여 라우트 정의하기
+- **[Memory Router](https://reacttraining.com/react-router/web/api/MemoryRouter)** 실제로 주소는 존재하지는 않는 라우터. 리액트 네이티브나, 임베디드 웹앱에서 사용하면 유용하다.
+
+그 외의 것들은 [공식 매뉴얼](https://reacttraining.com/react-router/web/guides/philosophy) 참고!
 
