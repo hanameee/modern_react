@@ -59,3 +59,65 @@ Context API 를 사용해서 글로벌 상태를 관리 할 때에는 일반적�
 
 액션 생성함수는 액션을 만드는 함수! 파라미터를 받아와서 액션 객체 형태로 만들어준다.
 
+```react
+export function addTodo(data) {
+  return {
+    type: 'ADD_TODO',
+    data
+  };
+}
+// 화살표 함수로도 만들 수 있다
+export const changeInput = text => ({
+  type: 'CHANGE_INPUT',
+  text
+})
+```
+
+이런 액션 생성함수를 만들어 사용하는 이유는 나중에 컴포넌트에서 더욱 쉽게 액션을 발생시키기 위해서! 그래서 보통 함수 앞에 export 를 붙여서 다른 파일에서 불러와서 사용함.
+
+## 3. 리듀서 (Reducer)
+
+리듀서는 변화를 일으키는 함수로, 두가지의 파라미터를 받아온다.
+
+```react
+function reducer(state,action) {
+  // 상태 업데이트 로직
+ 	return alteredState;
+}
+```
+
+리듀서는 **현재의 상태**와, **전달 받은 액션**을 참고하여 **새로운 상태를 만들어서 반환**한다.
+
+Ex. 카운터를 위한 리듀서
+
+```react
+function counter(state,action) {
+  switch(action.type) {
+    case 'INCREASE':
+      return state + 1;
+    case 'DECREASE':
+      return state - 1;
+    default:
+      return state;
+  }
+}
+```
+
+⚠️ `useReducer` hook 에선 일반적으로 `default:` 부분에 `throw new Error('Unhandled Action')`과 같이 에러처리를 하지만, 리덕스의 리듀서에서는 기존 `state`를 그대로 반환하도록 작성해야한다!
+
+또한, 리덕스를 사용 할 때는 여러개의 리듀서 (Sub Reducer) 들을 만들고 이를 합쳐서 루트 리듀서 (Root Reducer)를 만들 수 있다.
+
+## 4. 스토어 (Store)
+
+리덕스에서는 한 애플리케이션 당 하나의 스토어를 만든다. 스토어 안에는 (1) 현재의 앱 상태와 (2) 리듀서가 들어가 있고, 추가적으로 몇가지 내장 함수들이 있다!
+
+## 5. 디스패치 (Dispatch)
+
+디스패치는 스토어의 내장함수 중 하나로, 액션을 발생시키는 함수다. dispatch(action) 이런식으로 액션을 파라미터로 전달해 호출하고, 이렇게 호출을 하면 스토어는 리듀서 함수를 실행시켜서 해당 액션을 처리하는 로직이 있다면 액션을 참고하여 새로운 상태를 만들어준다.
+
+## 6. 구독 (subscribe)
+
+구독 또한 스토어의 내장함수 중 하나다. subscribe 함수는, 함수 형태의 값을 파라미터로 받아온다. subscribe 함수에 특정 함수를 전달해주면, 액션이 디스패치 되었을 때 마다 전달해준 함수가 호출됩니다.
+
+리액트에서 리덕스를 사용할 때 보통 subscribe 함수를 직접 사용하는 일은 별로 없고, 그 대신 react-redux 라는 라이브러리에서 제공하는 `connect` 함수 또는 `useSelector` Hook 을 사용하여 리덕스 스토어의 상태를 구독한다.
+
