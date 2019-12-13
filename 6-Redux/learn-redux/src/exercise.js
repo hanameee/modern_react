@@ -8,7 +8,7 @@ const initialState = {
 
 const INCREASE = "INCREASE";
 const DECREASE = "DECREASE";
-const CHANGE_DATA = "CHANGE_DATA";
+const CHANGE_TEXT = "CHANGE_TEXT";
 const ADD_TO_LIST = "ADD_TO_LIST";
 
 function increase() {
@@ -22,7 +22,7 @@ const decrease = () => ({
 });
 
 const changeText = text => ({
-    type: CHANGE_DATA,
+    type: CHANGE_TEXT,
     text
 });
 
@@ -43,7 +43,7 @@ function reducer(state = initialState, action) {
                 ...state,
                 counter: state.counter - 1
             };
-        case CHANGE_DATA:
+        case CHANGE_TEXT:
             return {
                 ...state,
                 text: action.text
