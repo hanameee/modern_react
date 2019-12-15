@@ -11,6 +11,7 @@ export const increase = () => ({ type: INCREASE });
 export const decrease = () => ({ type: DECREASE });
 
 /* 초기 상태 선언 */
+// 리듀서의 초기 상태는 꼭 객체타입일 필요는 없다. 배열이여도 되고, 원시 타입 (숫자, 문자열, 불리언 이여도 상관 없음.
 const initialState = {
     number: 0,
     diff: 1

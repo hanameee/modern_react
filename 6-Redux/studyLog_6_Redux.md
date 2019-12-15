@@ -149,3 +149,31 @@ function counter(state,action) {
 
 실행 할 때마다 다른 결과값이 나타나는 new Date() 나,  난수 생성, 혹은 네트워크에 요청 하는 작업 등은 순수하지 않은 작업이므로, 리듀서 함수의 바깥에서 처리해줘야 함! 그런것을 하기 위해서, [리덕스 미들웨어](https://velopert.com/3401) 를 사용하는 것. 이는 나중에 다룬다.
 
+
+
+#리덕스 모듈 만들기
+
+## 리덕스 모듈이란?
+
+리덕스를 사용하기 위해 필요한 다음 항목들이 모두 들어있는 자바스크립트 파일을 의미한다.
+
+- 액션 타입
+- 액션 생성함수
+- 리듀서
+
+ 각 항목들은 각각 별개의 파일에 작성할 수도 있다. 한번에 몰아서 작성해도 무방한데 이렇게 리듀서와 액션 관련 코드들을 하나의 파일에 몰아서 작성하는 것을 [Ducks 패턴](https://github.com/erikras/ducks-modular-redux)이라고 한다.
+
+## 1. 액션 타입 만들기
+
+```react
+/* 액션 타입 만들기 */
+// Ducks 패턴을 따를땐 액션의 이름에 접두사를 넣어주는 것이 좋다. (다른 모듈과 액션 이름이 중복되는 것을 방지)
+const SET_DIFF = 'counter/SET_DIFF';
+const INCREASE = 'counter/INCREASE';
+const DECREASE = 'counter/DECREASE';
+
+const SET_DIFF = 'counter/SET_DIFF';
+const INCREASE = 'counter/INCREASE';
+const DECREASE = 'counter/DECREASE';
+```
+
