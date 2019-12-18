@@ -117,7 +117,7 @@ function counter(state,action) {
 
 ## 6. 구독 (subscribe)
 
-구독 또한 스토어의 내장함수 중 하나다. subscribe 함수는, 함수 형태의 값을 파라미터로 받아온다. subscribe 함수에 특정 함수를 전달해주면, 액션이 디스패치 되었을 때 마다 전달해준 함수가 호출됩니다.
+구독 또한 스토어의 내장함수 중 하나다. subscribe 함수는, 함수 형태의 값을 파라미터로 받아온다. subscribe 함수에 특정 함수를 전달해주면, 액션이 디스패치 되었을 때 마다 전달해준 함수가 호출된다.
 
 리액트에서 리덕스를 사용할 때 보통 subscribe 함수를 직접 사용하는 일은 별로 없고, 그 대신 react-redux 라는 라이브러리에서 제공하는 `connect` 함수 또는 `useSelector` Hook 을 사용하여 리덕스 스토어의 상태를 구독한다.
 
@@ -166,14 +166,68 @@ function counter(state,action) {
 ## 1. 액션 타입 만들기
 
 ```react
-/* 액션 타입 만들기 */
 // Ducks 패턴을 따를땐 액션의 이름에 접두사를 넣어주는 것이 좋다. (다른 모듈과 액션 이름이 중복되는 것을 방지)
 const SET_DIFF = 'counter/SET_DIFF';
 const INCREASE = 'counter/INCREASE';
 const DECREASE = 'counter/DECREASE';
-
-const SET_DIFF = 'counter/SET_DIFF';
-const INCREASE = 'counter/INCREASE';
-const DECREASE = 'counter/DECREASE';
 ```
+
+## 2. 액션 생성 함수 만들기
+
+```react
+// export 키워드를 사용하여 내보내기
+export const setDiff = diff => ({
+  type: SET_DIFF,
+  diff
+});
+
+export const increase = () => ({
+  tyle: INCREASE
+})
+
+export const decrease = () => ({
+  tyle: DECREASE
+})
+```
+
+## 3. 초기 상태 선언하기
+
+```react
+const initialState = {
+  number: 0,
+  diff: 1
+}
+```
+
+## 4. 리듀서 선언하기
+
+```react
+// 리듀서는 export default를 사용하여 내보내기
+export default function counter(state = initialState, action){
+  switch(action.type) {
+    case SET_DIFF:
+      return {
+        ...state,
+        diff: action.diff
+      }
+    ...
+  }
+}
+```
+
+# Presentational / Container component
+
+## 프리젠테이셔널 컴포넌트란?
+
+리덕스 스토어에 직접적으로 접근하지 않고, **필요한 값 또는 함수를 props 로만 받아와서 사용**하는 컴포넌트를 의미한다.
+
+ 따라서 프리젠테이셔널 컴포넌트에선 주로 보여지는 UI를 선언하는 것에 집중하게 된다.
+
+## 컨테이너 컴포넌트란?
+
+**리덕스 스토어의 상태를 조회하거나, 액션을 디스패치**하는 컴포넌트를 의미한다.
+
+HTML 태그를 직접 사용하지 않고, 다른 프리젠테이셔널 컴포넌트들을 불러와서 prop 또는 함수를 넘겨주어 사용한다.
+
+하나의 패턴일 뿐, 궂이 이렇게 나눌 필요는 없다고 한다. 다만, 아직까진 정석이므로 튜토리얼에서 앞으로의 코드는 이렇게 작성한다고!
 
