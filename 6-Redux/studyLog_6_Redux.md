@@ -231,3 +231,61 @@ HTML 태그를 직접 사용하지 않고, 다른 프리젠테이셔널 컴포�
 
 하나의 패턴일 뿐, 궂이 이렇게 나눌 필요는 없다고 한다. 다만, 아직까진 정석이므로 튜토리얼에서 앞으로의 코드는 이렇게 작성한다고!
 
+#### useSelector 최적화에 대해
+
+useSelector 에서 state의 1가지 값만 가져오는 것이 아니라, 여러가지 값을 가져오기 위해 객체를 리턴한다면 컴포넌트가 렌더링 될 때마다 새로운 객체를 생성하기에 equality check가 안된다.
+
+[예시]
+
+```react
+const {number, diff} = useSelector(state => ({
+  number: state.counter.number,
+  diff: state.counter.diff
+	})
+);                                  
+```
+
+이 경우 최적화를 위해 2가지 방법을 사용할 수 있다.
+
+> 1. useSelector을 여러번 사용하기
+> 2. 두번째 파라미터로 equalityFn 넘겨주기
+
+1. useSelector을 여러번 사용하기
+
+   ```react
+   const number = useSelector(state => state.counter.number);
+   const diff = useSelector(state => state.counter.diff);
+   ```
+
+   이렇게 하면 최적화가 잘 이루어진다.
+
+2. 두번째 파라미터로  equalityFn 넘겨주기
+
+두번째 파라미터 (equalityFn) 로 shallowEqual 을 넘겨주면 최적화가 가능한데 이 `shallowEqual` 에 대해 좀 더 알아보자.
+
+```js
+const object = {
+  a: {
+    x:1,
+    y:2,
+    z:3
+  },
+  b: 1,
+  c: [1,2,3,4]
+}
+```
+
+shallowEqual로 위 object를 비교하게 되면
+`(left, right) => left.a === right.a && left.b === right.b && left.c === right.c`
+이렇게 비교한다. 따라서, **x,y,z가 바뀌면 그걸 감지해낼 수 없다**.
+
+하지만 우리가 상태를 update 할때 **불변성을 유지**하면서 x,y,z 값을 바꿨다면 결과적으로  a 객체가 새롭게 바뀌는 것이므로 shallowEqual을 써도 해당 변화를 감지해 낼 수 있다!
+=> 따라서 불변성을 지키면서 상태를 update 하는 것이 중요하다!
+
+정리하자면, useSelector 을 통해 여러가지 값을 가져와야 할 때는
+
+- (1) useSelector을 여러번 사용해서 하나씩 값을 가져오거나
+- (2)객체로 가져오되 shallowEqual을 해주거나
+
+해주면 최적화가 된다는 것 :)
+

@@ -25,17 +25,16 @@ function Todos({ todos, onCreate, onToggle }) {
     const [text, setText] = useState("");
     const onChange = e => setText(e.target.value);
     const onSubmit = e => {
-        e.preventDefault();
+        e.preventDefault(); // submit 이벤트 발생 시 새로고침 방지
         onCreate(text);
-        setText("");
+        setText(""); //인풋 초기화
     };
-
     return (
         <div>
             <form onSubmit={onSubmit}>
                 <input
                     value={text}
-                    placeholder="할 일을 입력하세요.."
+                    text="할 일을 입력하세요"
                     onChange={onChange}
                 />
                 <button type="submit">등록</button>

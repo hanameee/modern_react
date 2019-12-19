@@ -5,13 +5,13 @@ const INCREASE = "counter/INCREASE";
 const DECREASE = "counter/DECREASE";
 
 /* 액션 생성함수 만들기 */
-// 액션 생성함수를 만들고 export 해주기
+// 액션 생성함수를 만들고 export 해주기 - dispatch 를 좀 더 편리하게 하기 위해서 만들어 주는 것
 export const setDiff = diff => ({ type: SET_DIFF, diff });
 export const increase = () => ({ type: INCREASE });
 export const decrease = () => ({ type: DECREASE });
 
 /* 초기 상태 선언 */
-// 리듀서의 초기 상태는 꼭 객체타입일 필요는 없다. 배열이여도 되고, 원시 타입 (숫자, 문자열, 불리언 이여도 상관 없음.
+// 리듀서의 초기 상태는 꼭 객체타입일 필요는 없음. 배열이여도 되고, 원시 타입 (숫자, 문자열, 불리언 이여도 상관 없음.
 const initialState = {
     number: 0,
     diff: 1

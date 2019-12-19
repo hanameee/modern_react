@@ -1,5 +1,4 @@
 import { createStore } from "redux";
-
 // createStore은 store을 만들어주는 함수
 // 리액트 프로젝트에서는 단 하나의 스토어를 만듦
 
